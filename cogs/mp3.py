@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-import tts_util as tts
+import cogs.util.tts_util as tts
 from mutagen.mp3 import MP3
 import time
 import os

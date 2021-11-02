@@ -6,7 +6,7 @@ import os
 intents = discord.Intents.default()
 intents.members = True
 
-TOKEN = os.getenv('BOT_TOKEN')
+TOKEN = os.environ['BOT_TOKEN']
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 

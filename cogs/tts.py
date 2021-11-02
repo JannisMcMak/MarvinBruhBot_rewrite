@@ -1,5 +1,5 @@
 from discord.ext import commands
-import tts_util as tts
+import cogs.util.tts_util as tts
 
 
 class TTS(commands.Cog):
