@@ -1,5 +1,5 @@
 from discord.ext import commands
-import cogs.util.tts_util as tts
+import util.tts_util as tts
 
 
 class TTS(commands.Cog):
@@ -13,7 +13,7 @@ class TTS(commands.Cog):
 
         filename = await tts.write_mp3(text)
 
-        await tts.play_in_channel(filename, ctx.author.channel)
+        await tts.play_in_channel(filename, ctx.author.voice.channel)
 
     @commands.command(help='TTS English')
     async def versuhe(self, ctx, *text):
@@ -22,7 +22,7 @@ class TTS(commands.Cog):
 
         filename = await tts.write_mp3(text, "eng")
 
-        await tts.play_in_channel(filename, ctx.author.channel)
+        await tts.play_in_channel(filename, ctx.author.voice.channel)
 
     @commands.command(help='TTS Indian')
     async def versuhi(self, ctx, *text):
@@ -31,7 +31,7 @@ class TTS(commands.Cog):
 
         filename = await tts.write_mp3(text, "ind")
 
-        await tts.play_in_channel(filename, ctx.author.channel)
+        await tts.play_in_channel(filename, ctx.author.voice.channel)
 
     @commands.command(help='Twitch TTS')
     async def versuht(self, ctx, *text):
@@ -40,7 +40,7 @@ class TTS(commands.Cog):
 
         filename = await tts.write_mp3_twitch(text)
         if filename != None:
-            await tts.play_in_channel(filename, ctx.author.channel)
+            await tts.play_in_channel(filename, ctx.author.voice.channel)
 
         else:
             await ctx.send('Text was too long')

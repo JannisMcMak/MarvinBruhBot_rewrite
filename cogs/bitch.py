@@ -1,5 +1,5 @@
 from discord.ext import commands
-import cogs.util.tts_util as tts
+import util.tts_util as tts
 
 
 class Bitch(commands.Cog):
@@ -16,7 +16,7 @@ class Bitch(commands.Cog):
 
             filename = await tts.write_mp3(text, "eng", True)
 
-            await tts.play_in_channel(filename, ctx.author.channel)
+            await tts.play_in_channel(filename, ctx.author.voice.channel)
 
         else:
             await ctx.send('No name provided.')
@@ -31,7 +31,7 @@ class Bitch(commands.Cog):
 
             filename = await tts.write_mp3_twitch(text, True)
             if filename != None:
-                await tts.play_in_channel(filename, ctx.author.channel)
+                await tts.play_in_channel(filename, ctx.author.voice.channel)
 
             else:
                 await ctx.send('Too long')

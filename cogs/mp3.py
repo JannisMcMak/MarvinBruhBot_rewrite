@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-import cogs.util.tts_util as tts
+import util.tts_util as tts
 from mutagen.mp3 import MP3
 import time
 import os
@@ -14,13 +14,13 @@ class Mp3s(commands.Cog):
     async def play(self, ctx, name: str = "list"):
 
         if name == 'list':
-            mp3s = os.listdir("../mp3s")
+            mp3s = os.listdir("mp3s/")
             embed = discord.Embed(title="Mp3s", color=0x01cdfe)
 
             for mp3 in mp3s:
                 name = mp3.split('.')
                 try:
-                    audio = MP3('./mp3s/' + name[0] + '.mp3')
+                    audio = MP3('mp3s/' + name[0] + '.mp3')
                     audio_length = time.strftime(
                         '%M:%S', time.gmtime(audio.info.length))
                     embed.add_field(
@@ -32,7 +32,7 @@ class Mp3s(commands.Cog):
 
         else:
             print('Mp3: ' + name)
-            filename = '../mp3s/' + name.lower() + '.mp3'
+            filename = 'mp3s/' + name.lower() + '.mp3'
 
             await tts.play_in_channel(filename, ctx.author.channel)
 

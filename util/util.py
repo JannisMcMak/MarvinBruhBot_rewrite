@@ -3,7 +3,7 @@ import json
 
 #-----------------------------Text generators--------------------------------------------
 async def get_gedicht(i):
-  with open('gedichte.json') as json_file:
+  with open('hidden/gedichte.json') as json_file:
     data = json.load(json_file)
     print(len(data))
     if i == 0:

@@ -7,8 +7,8 @@ import json
 import random
 import asyncio
 
-import cogs.util
-import cogs.util.tts_util as tts
+import util
+import util.tts_util as tts
 
 
 class Other(commands.Cog):
@@ -93,7 +93,7 @@ class Other(commands.Cog):
     async def gedicht(self, ctx, i: int = 0):
         print('Gedicht')
 
-        text = await cogs.util.util.get_gedicht(i)
+        text = await util.util.get_gedicht(i)
 
         filename = await tts.write_mp3(text, "de", True)
         channel = ctx.author.voice.channel
