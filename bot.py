@@ -1,7 +1,6 @@
 from discord.ext import commands
 import discord
 import os
-from pretty_help import PrettyHelp
 
 
 intents = discord.Intents.default()
@@ -12,9 +11,6 @@ TOKEN = os.getenv('BOT_TOKEN')
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 bot = commands.Bot(command_prefix='#', case_insensitive=True, intents=intents)
-
-#bot.help_command = PrettyHelp()
-#bot.remove_command('help')
 
 
 @bot.event
@@ -45,6 +41,12 @@ async def on_message(message):
   await bot.process_commands(message)
    
 
+bot.load_extension("cogs.admin")
+bot.load_extension("cogs.bitch")
+bot.load_extension("cogs.mp3")
+bot.load_extension("cogs.other")
+bot.load_extension("cogs.stats")
+bot.load_extension("cogs.tts")
 
 bot.run(TOKEN)
 

@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 import requests
 import operator
+import os
 
 
 class Stats(commands.Cog):
@@ -28,11 +29,9 @@ class Stats(commands.Cog):
             emoji = discord.utils.get(ctx.guild, name=emoji)
             await msg.add_reaction(emoji)
 
-
     @commands.command(help="Counting leaderboard")
     async def leaderboard(self, ctx):
-        r = requests.get(
-            "https://marvinbruhbot20.jannismcmak.repl.co/counters")
+        r = requests.get(os.environ["COUNTING_API_LINK"])
         d = r.json()
 
         sorted_dict = dict(
@@ -48,3 +47,7 @@ class Stats(commands.Cog):
             embed.add_field(name=k, value=sorted_dict[k], inline=False)
 
         await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Stats(bot))

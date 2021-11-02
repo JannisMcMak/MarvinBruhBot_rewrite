@@ -16,3 +16,7 @@ class Administration(commands.Cog):
     @commands.command()
     async def stop(self, ctx):
         sys.exit(1)
+
+
+def setup(bot):
+    bot.add_cog(Administration(bot))

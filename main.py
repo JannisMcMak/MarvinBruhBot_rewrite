@@ -1,7 +1,6 @@
 import os
 import bot
 import server
-import text
 
 
 os.system('chmod +777 ./ffmpeg')

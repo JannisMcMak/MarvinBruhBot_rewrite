@@ -1,5 +1,5 @@
 from discord.ext import commands
-import util.tts_util as tts
+import tts_util as tts
 
 
 class TTS(commands.Cog):
@@ -44,3 +44,7 @@ class TTS(commands.Cog):
 
         else:
             await ctx.send('Text was too long')
+
+
+def setup(bot):
+    bot.add_cog(TTS(bot))

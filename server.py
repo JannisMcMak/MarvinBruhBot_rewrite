@@ -3,7 +3,6 @@ import os, shutil
 import json
 import main
 import asyncio
-from replit import db
 from quart_cors import cors
 
 app = Quart('Keep alive')

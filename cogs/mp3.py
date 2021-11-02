@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-import util.tts_util as tts
+import tts_util as tts
 from mutagen.mp3 import MP3
 import time
 import os
@@ -43,3 +43,7 @@ class Mp3s(commands.Cog):
         filename = 'mp3s/audio.mp3'
 
         await tts.play_in_channel(filename, channel)
+
+
+def setup(bot):
+    bot.add_cog(Mp3s(bot))

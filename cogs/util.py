@@ -1,5 +1,4 @@
 import random
-import itertools
 import json
 
 #-----------------------------Text generators--------------------------------------------

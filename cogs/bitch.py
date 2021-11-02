@@ -1,5 +1,5 @@
 from discord.ext import commands
-import util.tts_util as tts
+import tts_util as tts
 
 
 class Bitch(commands.Cog):
@@ -49,3 +49,7 @@ async def get_bitchass_line(i):
     }
 
     return switcher.get(i, "{} is a little bitch")
+
+
+def setup(bot):
+    bot.add_cog(Bitch(bot))

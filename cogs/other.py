@@ -7,8 +7,8 @@ import json
 import random
 import asyncio
 
-import util.util
-import util.tts_util as tts
+import util
+import tts_util as tts
 
 
 class Other(commands.Cog):
@@ -99,3 +99,7 @@ class Other(commands.Cog):
         channel = ctx.author.voice.channel
 
         await tts.play_in_channel(filename, channel)
+
+
+def setup(bot):
+    bot.add_cog(Other(bot))
