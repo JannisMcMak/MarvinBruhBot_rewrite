@@ -26,7 +26,7 @@ class Stats(commands.Cog):
         msg = await ctx.send(embed=embed)
 
         for emoji in emojis:
-            emoji = discord.utils.get(ctx.guild, name=emoji)
+            emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
             await msg.add_reaction(emoji)
 
     @commands.command(help="Counting leaderboard")

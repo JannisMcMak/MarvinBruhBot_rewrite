@@ -4,6 +4,9 @@ import os
 from dotenv import load_dotenv
 
 
+os.system('chmod +777 ./ffmpeg')
+
+
 intents = discord.Intents.default()
 intents.members = True
 

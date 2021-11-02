@@ -7,7 +7,7 @@ import json
 import random
 import asyncio
 
-import util
+import util.util as util
 import util.tts_util as tts
 
 
@@ -42,11 +42,11 @@ class Other(commands.Cog):
         else:
             r = requests.get("https://api.mcsrvstat.us/2/" + os.environ["MC_SERVER_IP"])
             r = r.json()
-            p = r["players"]
 
             status = r["online"]
 
             if status:
+                p = r["players"]
                 await ctx.send("Server online! ({}/{})".format(str(p["online"]), str(p["max"])))
 
             else:
@@ -93,7 +93,7 @@ class Other(commands.Cog):
     async def gedicht(self, ctx, i: int = 0):
         print('Gedicht')
 
-        text = await util.util.get_gedicht(i)
+        text = await util.get_gedicht(i)
 
         filename = await tts.write_mp3(text, "de", True)
         channel = ctx.author.voice.channel

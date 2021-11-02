@@ -34,7 +34,7 @@ class Mp3s(commands.Cog):
             print('Mp3: ' + name)
             filename = 'mp3s/' + name.lower() + '.mp3'
 
-            await tts.play_in_channel(filename, ctx.author.channel)
+            await tts.play_in_channel(filename, ctx.author.voice.channel)
 
 
     @commands.command()
