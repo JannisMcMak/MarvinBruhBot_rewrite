@@ -1,0 +1,108 @@
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@100;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="drop-container">
+     <H1>Custom Mp3s</H1>
+    <form action="/mp3s" method="POST" enctype="multipart/form-data" id="form">
+    <label class="file-select">
+      <input type="file" class="file" name="file" accept=".mp3">
+      Select File
+      <br>
+    </label>
+    <br>
+    <label>
+      <input type="text" class="name" placeholder="Command name" name="name">
+    </label>
+    <label>
+      <button type="submit" form="form" value="Submit">Add</button>
+    </label>
+    </form>
+</div>
+  </body>
+  
+  
+  <style>
+    body {
+      text-align: center; 
+      font-family: Livvic;
+      background-color: rgb(34, 40, 54);
+    }
+    H1 {
+        font-size: 35px;
+        color: white;
+    }
+    input:focus, select:focus, textarea:focus, button:focus {
+        outline: none;
+    } 
+    button {
+        font-family: Livvic;
+        background: transparent;
+        border: 2px solid white;
+        border-radius: 50px;
+        padding: 8px 15px;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+
+        overflow: hidden;
+        position: relative;
+
+        -webkit-transition: all 0.4s;
+        -moz-transition: all 0.4s;
+        transition: all 0.4s;
+    }      
+    button:hover{
+        color: rgb(34, 40, 54);
+        background-color:white;
+
+    }
+    button:after{
+        content: "";
+    }
+    input {
+        background: transparent;
+        border: 2px solid white;
+        border-radius: 50px;
+        padding: 8px 15px;
+        color: white;
+        font-family: Livvic;
+
+    }
+    ::placeholder {
+        font-family: Livvic;
+        color: rgba(255, 255, 255, 0.514);
+    }
+    .file-select {
+        border: 2px solid white;
+        border-radius: 50px;
+        padding: 8px 15px;
+        color: white;
+        cursor: pointer;
+    }
+    input[type="file"] {
+        display: none;
+    }
+  </style>
+  
+  <script>
+    var dropContainer = document.getElementById('drop-container');
+
+    dropContainer.ondragover = dropContainer.ondragenter = function(evt) {
+        evt.preventDefault();
+    };
+
+    dropContainer.ondrop = function(evt) {
+        // pretty simple -- but not for IE :(
+        fileInput.files = evt.dataTransfer.files;
+
+        // If you want to use some of the dropped files
+        const dT = new DataTransfer();
+        dT.items.add(evt.dataTransfer.files[0]);
+        dT.items.add(evt.dataTransfer.files[3]);
+        fileInput.files = dT.files;
+
+        evt.preventDefault();
+    };
+  </script>
