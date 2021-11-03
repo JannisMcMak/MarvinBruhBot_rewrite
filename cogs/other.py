@@ -17,15 +17,20 @@ class Other(commands.Cog):
 
     @commands.command(help="Random Simon Name Generator")
     async def simon(self, ctx, arg=None):
-        if arg is None:
-            with open('hidden/simon_combinations.json', 'r') as f:
+        with open('hidden/simon_combinations.json', 'r') as f:
               data = json.load(f)
               combination = random.choice(data)
-            
-            await ctx.send(" ".join(combination))
 
+        if arg is None:            
+            await ctx.send(" ".join(combination))
+        
+        elif arg == "v" or arg == "voice":
+            filename = await tts.write_mp3("".join(combination), "de", True)
+
+            await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
             await ctx.send("Alle Kombinationen: " + os.environ["SIMON_COMBINATIONS_WEB_LINK"])
+
 
     @commands.command(help="MC server utilities")
     async def server(self, ctx, arg=None):

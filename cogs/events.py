@@ -33,13 +33,13 @@ class Events(commands.Cog):
                     print(role)
                     await self.bot.change_presence(activity=discord.Game(name=role.name))
 
-        await self.bot.process_commands(message)
+        #await self.bot.process_commands(message)
 
 
     #Event to monitor user voice activity
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if member.id == 380453053901307904:
+        if member.id == 517446142439587870:
             if after.channel is not None:
                 print("Simon joined channel: " + after.channel.name)
 

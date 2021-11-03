@@ -29,6 +29,7 @@ def clear_cache():
 
 clear_cache()
 
+
 bot.load_extension("cogs.admin")
 bot.load_extension("cogs.bitch")
 bot.load_extension("cogs.mp3")
