@@ -10,6 +10,12 @@ import asyncio
 import util.util as util
 import util.tts_util as tts
 
+from logbook import Logger, StreamHandler
+import sys
+
+StreamHandler(sys.stdout).push_application()
+log = Logger('Other')
+
 
 class Other(commands.Cog):
     def __init__(self, bot):
@@ -26,7 +32,7 @@ class Other(commands.Cog):
         
         elif arg == "v" or arg == "voice":
             filename = await tts.write_mp3("".join(combination), "de", True)
-
+            await ctx.send(" ".join(combination))
             await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
             await ctx.send("Alle Kombinationen: " + os.environ["SIMON_COMBINATIONS_WEB_LINK"])
@@ -87,7 +93,7 @@ class Other(commands.Cog):
                 a = random.randint(0, len(channels) - 1)
                 await user.move_to(channels[a], reason="Wake")
             except Exception as e:
-                print(e)
+                log.error(e)
 
             await asyncio.sleep(0.5)
 
@@ -96,8 +102,6 @@ class Other(commands.Cog):
 
     @commands.command(help='Gedichte von Dichtern')
     async def gedicht(self, ctx, i: int = 0):
-        print('Gedicht')
-
         text = await util.get_gedicht(i)
 
         filename = await tts.write_mp3(text, "de", True)

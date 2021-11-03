@@ -3,6 +3,11 @@ import discord
 import os
 import shutil
 from dotenv import load_dotenv
+from logbook import Logger, StreamHandler
+import sys
+
+StreamHandler(sys.stdout).push_application()
+log = Logger('Main')
 
 intents = discord.Intents.default()
 intents.members = True
@@ -15,7 +20,7 @@ bot = commands.Bot(command_prefix='#', case_insensitive=True, intents=intents)
 
 
 def clear_cache():
-  print('Clearing cache...')
+  log.info('Clearing cache...')
   folder = 'cache'
   for filename in os.listdir(folder):
     file_path = os.path.join(folder, filename)
@@ -25,7 +30,7 @@ def clear_cache():
       elif os.path.isdir(file_path):
         shutil.rmtree(file_path)
     except Exception as e:
-      print('Error clearing cache: {}'.format(e))
+      log.error('Error clearing cache: {}'.format(e))
 
 clear_cache()
 

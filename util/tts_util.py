@@ -18,7 +18,6 @@ async def play_in_channel(filename, channel):
 async def write_mp3(text, lang: str = "de", formatted: bool = False):
     if not formatted:
         text = ' '.join(text)
-    #print(text)
 
     if lang == "eng":
         url = 'http://api.voicerss.org/?key=16d017cd4d194a22b199c5739bd6ab42&hl=en-us&v=Mike&src={}'
@@ -45,7 +44,6 @@ async def write_mp3_twitch(text, formatted: bool = False):
     base_url = 'https://lazypy.ro/tts/proxy.php?service=Polly&voice=Brian&text={}'
 
     r = requests.post(base_url.format(text))
-    print(r.text)
     j = json.loads(r.text)
     url = j["speak_url"]
     r = requests.get(url)

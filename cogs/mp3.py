@@ -5,6 +5,12 @@ from mutagen.mp3 import MP3
 import time
 import os
 
+from logbook import Logger, StreamHandler
+import sys
+
+StreamHandler(sys.stdout).push_application()
+log = Logger('Mp3s')
+
 
 class Mp3s(commands.Cog):
     def __init__(self, bot):
@@ -26,12 +32,13 @@ class Mp3s(commands.Cog):
                     embed.add_field(
                         name=name[0], value=audio_length, inline=True)
                 except Exception as err:
-                    print(err)
+                    log.error(err)
 
             await ctx.send(embed=embed)
 
         else:
-            print('Mp3: ' + name)
+            log.info("Audio file: " + name)
+
             filename = 'mp3s/' + name.lower() + '.mp3'
 
             await tts.play_in_channel(filename, ctx.author.voice.channel)

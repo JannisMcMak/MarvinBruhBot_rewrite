@@ -14,7 +14,7 @@ class Stats(commands.Cog):
         emojis = ['YES', 'NO']
 
         host = ctx.author
-        print(topic)
+
         t = ''.join(topic)
 
         embed = discord.Embed(title=" ")
