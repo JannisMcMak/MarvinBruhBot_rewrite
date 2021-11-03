@@ -3,6 +3,7 @@ import discord
 import util.tts_util as tts
 import random
 import json
+import os
 
 class Events(commands.Cog):
     def __init__(self, bot):
@@ -39,7 +40,7 @@ class Events(commands.Cog):
     #Event to monitor user voice activity
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if member.id == 517446142439587870:
+        if member.id == os.environ["SIMON_TRACKED_USER"]:
             if after.channel is not None:
                 print("Simon joined channel: " + after.channel.name)
 

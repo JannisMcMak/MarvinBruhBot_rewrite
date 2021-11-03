@@ -6,7 +6,6 @@ import asyncio
 
 
 async def play_in_channel(filename, channel):
-    try:
         vc = await channel.connect()
         vc.play(discord.FFmpegPCMAudio(source=filename))
 
@@ -14,14 +13,12 @@ async def play_in_channel(filename, channel):
             await asyncio.sleep(1)
         await vc.disconnect()
 
-    except discord.errors.ClientException as e:
-        print(e)
 
 
 async def write_mp3(text, lang: str = "de", formatted: bool = False):
     if not formatted:
         text = ' '.join(text)
-    print(text)
+    #print(text)
 
     if lang == "eng":
         url = 'http://api.voicerss.org/?key=16d017cd4d194a22b199c5739bd6ab42&hl=en-us&v=Mike&src={}'

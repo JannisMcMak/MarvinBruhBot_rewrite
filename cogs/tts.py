@@ -8,8 +8,8 @@ class TTS(commands.Cog):
 
     @commands.command(help='TTS German')
     async def versuh(self, ctx, *text):
-        print(text)
-        print(ctx.author.name)
+        #print(text)
+        #print(ctx.author.name)
 
         filename = await tts.write_mp3(text)
 

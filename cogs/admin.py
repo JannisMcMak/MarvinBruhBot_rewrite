@@ -13,8 +13,8 @@ class Administration(commands.Cog):
     async def selfdestruct(self, ctx):
         await ctx.author.kick()
 
-    @commands.command()
-    async def stop(self, ctx):
+    @commands.command(help="Reload codebase")
+    async def reload(self, ctx):
         sys.exit(1)
 
 
