@@ -3,10 +3,18 @@ import json
 import time
 import discord
 import asyncio
+import os.path
+from util.logger import Logger
 
+log = Logger("TTS-Handler")
 
 async def play_in_channel(filename, channel):
+        if not os.path.isfile(filename):
+            log.error("Mp3 file does not exist.")
+            return
+
         vc = await channel.connect()
+        
         vc.play(discord.FFmpegPCMAudio(source=filename))
 
         while vc.is_playing():

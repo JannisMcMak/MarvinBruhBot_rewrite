@@ -2,7 +2,7 @@ import random
 import json
 import discord
 
-#-----------------------------Text generators--------------------------------------------
+
 async def get_gedicht(i):
   with open('hidden/gedichte.json') as json_file:
     data = json.load(json_file)

@@ -1,15 +1,13 @@
 from discord.ext import commands
 import discord
-import util.tts_util as tts
 from mutagen.mp3 import MP3
 import time
 import os
 
-from logbook import Logger, StreamHandler
-import sys
+import util.tts_util as tts
+import util
 
-StreamHandler(sys.stdout).push_application()
-log = Logger('Mp3s')
+log = util.logger.Logger('Mp3s')
 
 
 class Mp3s(commands.Cog):

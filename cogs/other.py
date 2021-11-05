@@ -7,14 +7,10 @@ import json
 import random
 import asyncio
 
-import util.util as util
+import util
 import util.tts_util as tts
 
-from logbook import Logger, StreamHandler
-import sys
-
-StreamHandler(sys.stdout).push_application()
-log = Logger('Other')
+log = util.logger.Logger('Other')
 
 
 class Other(commands.Cog):
@@ -102,7 +98,7 @@ class Other(commands.Cog):
 
     @commands.command(help='Gedichte von Dichtern')
     async def gedicht(self, ctx, i: int = 0):
-        text = await util.get_gedicht(i)
+        text = await util.utilities.get_gedicht(i)
 
         filename = await tts.write_mp3(text, "de", True)
         channel = ctx.author.voice.channel

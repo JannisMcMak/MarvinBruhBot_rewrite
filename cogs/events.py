@@ -1,14 +1,14 @@
 from discord.ext import commands
 import discord
-import util.tts_util as tts
-import util
 import random
 import json
 import os
-from logbook import Logger, StreamHandler
-import sys
 
-StreamHandler(sys.stdout).push_application()
+import util.tts_util as tts
+import util.utilities as utilities
+from util.logger import Logger
+
+
 log = Logger('Events')
 
 
@@ -19,7 +19,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Loading...")
-        log.info(f'{self.bot.user} has connected to Discord!')
+        log.success(f'{self.bot.user} has connected to Discord!')
 
         n = []
         for g in self.bot.guilds:
@@ -38,7 +38,7 @@ class Events(commands.Cog):
             roles = message.channel.guild.roles
             for role in roles:
                 if role.mention in message.content:
-                    log.info("Presence has been changed to " + role)
+                    log.info("Presence has been changed to " + role.name)
                     await self.bot.change_presence(activity=discord.Game(name=role.name))
 
         #await self.bot.process_commands(message)
@@ -48,7 +48,7 @@ class Events(commands.Cog):
     async def on_command(self, ctx: commands.Context):
         log = Logger(ctx.cog.qualified_name)
 
-        command_name = util.util.get_command_name(ctx.message)
+        command_name = utilities.get_command_name(ctx.message)
 
         log.info("Command " + command_name.upper() + " invoked by " + ctx.author.name)
 
@@ -60,9 +60,12 @@ class Events(commands.Cog):
         log.debug(type(error))
 
         if isinstance(error, commands.errors.MissingRequiredArgument) or isinstance(error, commands.errors.BadArgument):
-            help_command = "#help " + util.util.get_command_name(ctx.message)
+            help_command = "#help " + utilities.get_command_name(ctx.message)
 
             await ctx.send("Insufficent arguments. Try `" + help_command + "` to view required arguments.")
+
+        if isinstance(error, utilities.NoMp3FileError):
+            await ctx.send("Mp3 file does not exist.")
 
 
     #Event to monitor user voice activity
