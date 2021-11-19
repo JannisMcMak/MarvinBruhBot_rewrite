@@ -9,7 +9,7 @@ class Logger:
         self.name = cog
 
     def _send(self, message, color):
-        print(colored(self._timestamp(), "blue") + " [" + colored(self.name, "cyan") + "] " + colored(message, color))
+        print(colored(self._timestamp(), "cyan") + " [" + colored(self.name, "cyan") + "] " + colored(message, color))
 
     def _timestamp(self):
         now = datetime.now()
@@ -25,7 +25,7 @@ class Logger:
         self._send(message, "red")
 
     def debug(self, message):
-        self._send(message, "grey")
+        self._send(message, "magenta")
 
     def success(self, message):
         self._send(message, "green")

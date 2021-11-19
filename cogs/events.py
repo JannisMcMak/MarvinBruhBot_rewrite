@@ -25,7 +25,7 @@ class Events(commands.Cog):
         for g in self.bot.guilds:
             n.append(g.name)
 
-        log.info("Servers: " + ",".join(n))
+        log.info("Servers: " + ", ".join(n))
 
 
     #Event to change Rich Presence to called game
