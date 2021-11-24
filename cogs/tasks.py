@@ -63,7 +63,7 @@ class Tasks(commands.Cog):
                 elif interval < 60:
                     text = text.format(str(interval) + "minutes")
                 else:
-                    text = text.format(str(interval / 60) + "hours")
+                    text = text.format(str(int(interval / 60)) + "hours")
 
                 
                 filename = await tts.write_mp3_twitch(text, True)
