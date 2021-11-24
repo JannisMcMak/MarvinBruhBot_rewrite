@@ -1,0 +1,12 @@
+env
+hidden/
+mp3s/
+.env
+.git
+.gitignore
+.vscode
+*.json
+*.mp3
+__pycache__
+TODO
+

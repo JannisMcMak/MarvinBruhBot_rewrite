@@ -19,6 +19,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         log.info("Loading...")
+        log.debug("Running with PID " + str(os.getpid()))
         log.success(f'{self.bot.user} has connected to Discord!')
 
         n = []

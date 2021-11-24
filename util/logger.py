@@ -1,8 +1,13 @@
 import colorama
+from dotenv.main import load_dotenv
 from termcolor import colored
 from datetime import datetime
+import pytz
+from dotenv import load_dotenv
+import os
 
 colorama.init()
+load_dotenv()
 
 class Logger:
     def __init__(self, cog):
@@ -12,7 +17,7 @@ class Logger:
         print(colored(self._timestamp(), "cyan") + " [" + colored(self.name, "cyan") + "] " + colored(message, color))
 
     def _timestamp(self):
-        now = datetime.now()
+        now = datetime.now(tz=pytz.timezone(os.environ["TZ"]))
         return now.strftime("%Y-%m-%d-%H:%M:%S")
 
     def info(self, message):
