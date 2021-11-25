@@ -57,7 +57,7 @@ class Events(commands.Cog):
     #Error handling
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        log.error(error)
+        log.error(str(error))
         log.debug(type(error))
 
         if isinstance(error, commands.errors.MissingRequiredArgument) or isinstance(error, commands.errors.BadArgument):
@@ -65,7 +65,10 @@ class Events(commands.Cog):
 
             await ctx.send("Insufficent arguments. Try `" + help_command + "` to view required arguments.")
 
-        if isinstance(error, utilities.NoMp3FileError):
+        elif "object has no attribute" in str(error):
+            await ctx.send("Please connect to a voice channel first.")
+        
+        elif "Mp3 file does not exist." in str(error):
             await ctx.send("Mp3 file does not exist.")
 
 

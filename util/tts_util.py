@@ -13,6 +13,10 @@ async def play_in_channel(filename, channel):
             log.error("Mp3 file does not exist.")
             return
 
+        if channel is None:
+            log.error("User is connected to a channel")
+            return
+
         vc = await channel.connect()
         
         vc.play(discord.FFmpegPCMAudio(source=filename))
