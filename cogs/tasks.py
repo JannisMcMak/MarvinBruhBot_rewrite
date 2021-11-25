@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import pytz
 from dotenv import load_dotenv
 import os
+from watchgod import awatch
 
 import util
 import util.tts_util as tts
@@ -15,8 +16,12 @@ log = util.logger.Logger('Tasks')
 class Tasks(commands.Cog):
     def __init__(self, bot):
         load_dotenv()
+
         self.bot = bot
         self.rl_tournament_time = os.environ["RL_TOURNAMENT_TIME"]
+
+        if os.environ["DEV"] == "yes":
+            self.watchtower.start()
 
 
     @commands.command(help="Rocket League tournament notifications")
@@ -95,7 +100,21 @@ class Tasks(commands.Cog):
                 filename = await tts.write_mp3_twitch(text, True)
                 await tts.play_in_channel(filename, channel)
 
-            
+    
+    @tasks.loop(seconds=5)
+    async def watchtower(self):
+        async for changes in awatch('./cogs'):
+            change = next(iter(changes))
+            f = change[1]
+            change = change[0]
+
+            if "modified" in str(change):
+                cog = f.split("\\")[1]
+                cog = cog.split(".")[0]
+
+                log.warn("Reloading cog: " + cog)
+                self.bot.reload_extension("cogs." + cog)
+
 
 def setup(bot):
     bot.add_cog(Tasks(bot))
