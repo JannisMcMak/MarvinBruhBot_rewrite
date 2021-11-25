@@ -21,11 +21,13 @@ class Tasks(commands.Cog):
         self.rl_tournament_time = os.environ["RL_TOURNAMENT_TIME"]
 
         if os.environ["DEV"] == "yes":
+            log.debug("Watchtower enabled!")
             self.watchtower.start()
 
 
     @commands.command(help="Rocket League tournament notifications")
-    async def tournament(self, ctx, action: str = "toggle", time: str = None):
+    async def tournament(self, ctx, action: str = "toggle", time: str = os.environ["RL_TOURNAMENT_TIME"]):
+
         async def start_loop():
             self.rl_tournament_time = time
 
@@ -107,13 +109,19 @@ class Tasks(commands.Cog):
             change = next(iter(changes))
             f = change[1]
             change = change[0]
+            print(f)
+            print(change)
 
-            if "modified" in str(change):
-                cog = f.split("\\")[1]
+            if "Change.modified" == str(change):
+                try:
+                    cog = f.split("/")[2]
+                except:
+                    cog = f.split("\\")[1]
                 cog = cog.split(".")[0]
 
                 log.warn("Reloading cog: " + cog)
                 self.bot.reload_extension("cogs." + cog)
+
 
 
 def setup(bot):
