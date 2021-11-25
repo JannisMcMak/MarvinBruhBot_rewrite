@@ -1,7 +1,8 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os
 import signal
+from watchgod import awatch
 
 from util.logger import Logger
 
@@ -12,6 +13,10 @@ class Administration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         load_dotenv()
+
+        if os.environ["DEV"] == "yes":
+            log.debug("Watchtower enabled!")
+            self.watchtower.start()
 
     @commands.command(help='Restart container')
     async def restart(self, ctx):
@@ -38,6 +43,25 @@ class Administration(commands.Cog):
         else:
             await ctx.send("Nur coole Leute dürfen das!")
 
+
+    @tasks.loop(seconds=5)
+    async def watchtower(self):
+        async for changes in awatch('./cogs'):
+            change = next(iter(changes))
+            f = change[1]
+            change = change[0]
+            print(f)
+            print(change)
+
+            if "Change.modified" == str(change):
+                try:
+                    cog = f.split("/")[2]
+                except:
+                    cog = f.split("\\")[1]
+                cog = cog.split(".")[0]
+
+                log.warn("Reloading cog: " + cog)
+                self.bot.reload_extension("cogs." + cog)
 
 def setup(bot):
     bot.add_cog(Administration(bot))
