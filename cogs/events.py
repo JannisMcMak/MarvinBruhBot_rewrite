@@ -47,7 +47,10 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command(self, ctx: commands.Context):
-        log = Logger(ctx.cog.qualified_name)
+        try:
+            log = Logger(ctx.cog.qualified_name)
+        except:
+            log = Logger("Unknown")
 
         command_name = utilities.get_command_name(ctx.message)
 
