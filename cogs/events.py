@@ -4,6 +4,8 @@ import random
 import json
 import os
 
+from dotenv import load_dotenv
+
 import util.tts_util as tts
 import util.utilities as utilities
 from util.logger import Logger
@@ -15,6 +17,7 @@ log = Logger('Events')
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        load_dotenv()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -32,10 +35,11 @@ class Events(commands.Cog):
     #Event to change Rich Presence to called game
     @commands.Cog.listener()
     async def on_message(self, message):
-        zrocken_channels = [714452232791261246,
-                            396671581558013952, 836988148814184509]
+        game_ping_channels = os.environ["GAME_TEXT_CHANNELS"].split(",")
+        for channel in game_ping_channels:
+            game_ping_channels[game_ping_channels.index(channel)] = int(channel)
 
-        if message.channel.id in zrocken_channels:
+        if message.channel.id in game_ping_channels:
             roles = message.channel.guild.roles
             for role in roles:
                 if role.mention in message.content:

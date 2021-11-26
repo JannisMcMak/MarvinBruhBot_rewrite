@@ -21,6 +21,12 @@ async def get_time_notification(i):
     
     return data.get(str(i), "I don't no man")
 
+async def get_bitch_voiceline(i):
+  with open('hidden/bitch_voicelines.json') as json_file:
+    data = json.load(json_file)
+    
+    return data.get(str(i), "{} is a little bitch")
+
 
 
 def get_command_name(message: discord.Message):
