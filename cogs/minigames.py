@@ -5,12 +5,13 @@ import random
 import asyncio
 
 
-class Jost(commands.Cog):
+class Minigames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(help="Jost sein schönes Rock, Paper Scissors game")
     async def cps(self, ctx):
+        """hurensohn"""
 
         def gewinner(wahl, computer, wahl_emote):
             ergebnis = (wahl - computer) % 3
@@ -103,4 +104,4 @@ class Jost(commands.Cog):
             await ctx.invoke(self.bot.get_command("cps"))
 
 def setup(bot):
-    bot.add_cog(Jost(bot))
+    bot.add_cog(Minigames(bot))
