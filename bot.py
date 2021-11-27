@@ -42,5 +42,6 @@ bot.load_extension("cogs.stats")
 bot.load_extension("cogs.tts")
 bot.load_extension("cogs.events")
 bot.load_extension("cogs.tasks")
+bot.load_extension("cogs.minigames")
 
 bot.run(TOKEN)

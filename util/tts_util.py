@@ -19,17 +19,19 @@ async def play_in_channel(filename, channel):
             log.error("User is connected to a channel")
             return
 
+        vc = None
+
         try:
             vc = await channel.connect()
         except:
-            log.warning("Skipping... Already connected to a channel")
+            log.warn("Skipping... Already connected to a channel")
+            return
         
         vc.play(discord.FFmpegPCMAudio(source=filename))
 
         while vc.is_playing():
             await asyncio.sleep(1)
         await vc.disconnect()
-
 
 
 async def write_mp3(text, lang: str = "de", formatted: bool = False):
