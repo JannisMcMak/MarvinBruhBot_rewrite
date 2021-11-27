@@ -32,13 +32,7 @@ class TTS(commands.Cog):
             await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
             await ctx.send('Text was too long')
-
-    
-    @commands.command(help='Stop playing and disconnect')
-    async def disconnect(self, ctx):
-        for voice_client in self.bot.voice_clients:
-            await voice_client.disconnect()
-
+            
 
 def setup(bot):
     bot.add_cog(TTS(bot))

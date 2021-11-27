@@ -1,9 +1,11 @@
+import discord
+
 import requests
 import json
 import time
-import discord
 import asyncio
 import os.path
+
 from util.logger import Logger
 
 log = Logger("TTS-Handler")
@@ -17,7 +19,10 @@ async def play_in_channel(filename, channel):
             log.error("User is connected to a channel")
             return
 
-        vc = await channel.connect()
+        try:
+            vc = await channel.connect()
+        except:
+            log.warning("Skipping... Already connected to a channel")
         
         vc.play(discord.FFmpegPCMAudio(source=filename))
 

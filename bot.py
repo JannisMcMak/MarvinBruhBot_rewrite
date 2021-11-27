@@ -36,7 +36,7 @@ clear_cache()
 
 bot.load_extension("cogs.admin")
 bot.load_extension("cogs.bitch")
-bot.load_extension("cogs.mp3")
+bot.load_extension("cogs.audio")
 bot.load_extension("cogs.other")
 bot.load_extension("cogs.stats")
 bot.load_extension("cogs.tts")

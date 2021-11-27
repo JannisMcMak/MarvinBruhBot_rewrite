@@ -72,6 +72,9 @@ class Events(commands.Cog):
 
             await ctx.send("Insufficent arguments. Try `" + help_command + "` to view required arguments.")
 
+        elif "Already connected to a voice channel" in str(error):
+            await ctx.send("Already connected to a channel.")
+            
         elif "object has no attribute" in str(error):
             await ctx.send("Please connect to a voice channel first.")
         

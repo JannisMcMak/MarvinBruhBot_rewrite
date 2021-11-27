@@ -5,6 +5,7 @@ import time
 import os
 
 import util.tts_util as tts
+import util.yt_util as yt
 import util
 
 log = util.logger.Logger('Mp3s')
@@ -14,7 +15,7 @@ class Audio(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help='Play mp3')
+    @commands.command(help='Play mp3 from file or youtube link')
     async def play(self, ctx, name: str = "list"):
 
         if name == 'list':
@@ -35,11 +36,15 @@ class Audio(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            log.info("Audio file: " + name)
-
-            filename = 'mp3s/' + name.lower() + '.mp3'
-
-            await tts.play_in_channel(filename, ctx.author.voice.channel)
+            if name.startswith("https://"):
+                player = await yt.YTDLSource.from_url(name, loop=self.bot.loop)
+                log.info("YTDL title: " + player.title)
+                await yt.YTDLSource.play_in_channel(player, ctx.author.voice.channel)
+            
+            else:
+                log.info("Audio file: " + name)              
+                filename = 'mp3s/' + name.lower() + '.mp3'
+                await tts.play_in_channel(filename, ctx.author.voice.channel)
 
 
     @commands.command()
@@ -49,6 +54,11 @@ class Audio(commands.Cog):
 
         await tts.play_in_channel(filename, channel)
 
+    @commands.command(help='Stop playing and disconnect')
+    async def disconnect(self, ctx):
+        for voice_client in self.bot.voice_clients:
+            voice_client.stop()
+            await voice_client.disconnect()
 
 def setup(bot):
     bot.add_cog(Audio(bot))
