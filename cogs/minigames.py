@@ -37,12 +37,14 @@ class Minigames(commands.Cog):
             embed.clear_fields()
             embed.add_field(name=f"{self.bot.user.name}:", value=f"{computer_emote}", inline=False)
             embed.add_field(name=f"{ctx.author.name}:", value=f"{wahl}\n\u200b", inline=False)
+            embed.set_author(name="Nochmal spielen: 🔁")
 
 
         async def timeout():
             embed.clear_fields()
             embed.add_field(name=f"Spiel vorbei du Sack", value=f"Wenn du nochmal so lange brauchst komm ich persönlich vorbei", inline=False)
             await message.edit(embed=embed)
+            await message.clear_reactions()
 
 
         embed = discord.Embed(title="\u200b\nCock, Petra, Sophia?\n\u200b", colour=0x8764B8)
@@ -100,6 +102,9 @@ class Minigames(commands.Cog):
         try:
             reaction, user = await self.bot.wait_for("reaction_add", check=check, timeout=20)
         except asyncio.TimeoutError:
+            embed.remove_author()
+            await message.edit(embed=embed)
+            await message.clear_reaction("🔁")
             return
 
         if str(reaction.emoji) == "🔁":

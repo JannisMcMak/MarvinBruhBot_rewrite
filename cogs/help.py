@@ -103,10 +103,12 @@ class Help(commands.Cog):
             # yes, for-loops have an else statement, it's called when no 'break' was issued
             else:
                 await ctx.send("This module doesn't exist...")
+                return
 
         # too many cogs requested - only one at a time allowed
         elif len(input) > 1:
             await ctx.send("Too many modules requested...")
+            return
 
 
         # sending reply embed using our own function defined above
