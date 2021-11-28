@@ -13,6 +13,7 @@ class Administration(commands.Cog):
     """
     Utility commands for administration
     """
+    
     def __init__(self, bot):
         self.bot = bot
         load_dotenv()
@@ -21,8 +22,10 @@ class Administration(commands.Cog):
             log.debug("Watchtower enabled!")
             self.watchtower.start()
 
-    @commands.command(help='Restart container')
+    @commands.command()
     async def restart(self, ctx):
+        """Restarts the container"""        
+
         if ctx.author.id == int(os.environ["ADMIN_USER"]):
             log.warn("Restarting container...")
 
@@ -31,13 +34,23 @@ class Administration(commands.Cog):
             await ctx.send("Nur coole Leute dürfen das!")
 
 
-    @commands.command(help='Selfdestruct 2.0 (try it)')
+    @commands.command()
     async def selfdestruct(self, ctx):
+        """Selfdestruct 2.0 (try it)"""        
+
         await ctx.author.kick()
 
 
-    @commands.command(help="Reload codebase")
+    @commands.command()
     async def reload(self, ctx, *cogs):
+        """Reloads codebase
+
+        Parameters
+        ----------
+        *cogs : str
+            Cog(s) to reload
+        """        
+
         if ctx.author.id == int(os.environ["ADMIN_USER"]):
             log.warn("Reloading cogs: " + ", ".join(cogs))
 
@@ -49,6 +62,8 @@ class Administration(commands.Cog):
 
     @tasks.loop(seconds=5)
     async def watchtower(self):
+        """Loop that watches for file changes in cogs/. Enabled in dev-mode"""        
+
         async for changes in awatch('./cogs'):
             change = next(iter(changes))
             f = change[1]

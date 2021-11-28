@@ -29,6 +29,10 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 log = Logger("YTDL")
 
 class YTDLSource(discord.PCMVolumeTransformer):
+    """
+    Helper class that handles streaming audio from a Youtube video
+    """
+
     def __init__(self, source, *, data, volume=0.5):
         super().__init__(source, volume)
 
@@ -39,6 +43,23 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     @classmethod
     async def from_url(cls, url, *, loop=None, stream=False):
+        """Creates a audio player that streams audio from a Youtube video
+
+        Parameters
+        ----------
+        url : str
+            URL of the Youtube video to stream
+        loop : asyncio.AbstractEventLoop, optional
+            The event loop used to stream the audio. This should be set to the event loop of the discord bot, by default None
+        stream : bool, optional
+            Whether to stream the audio or download it first, by default False
+
+        Returns
+        -------
+        discord.FFmpegPCMAudio
+            Audio player that streams the Youtube video
+        """
+
         loop = loop or asyncio.get_event_loop()
         data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=not stream))
 
@@ -51,18 +72,32 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
     @classmethod
     async def search_to_url(search_term):
+        """
+        Returns Youtube URL of a given search string
+        //TODO//
+        """
         pass
 
     @classmethod
     async def play_in_channel(cls, player, channel):
+        """Connects to a voice channel and plays an Mp3 file. Checks if the file and channel exist
+
+        Parameters
+        ----------
+        player : discord.FFmpegPCMAudio
+            Audio player that streams audio. Usually created with :func:`~util.yt_util.YTDLSource.from_url`
+        channel : discord.VoiceChannel
+            Channel to connect to
+        """
+
         if channel is None:
-            log.error("User is connected to a channel")
+            log.error("User is not connected to a channel")
             return
 
         try:
             vc = await channel.connect()
         except:
-            log.warning("Skipping... Already connected to a channel")
+            log.warn("Skipping... Already connected to a channel")
         
         vc.play(player)
         while vc.is_playing():

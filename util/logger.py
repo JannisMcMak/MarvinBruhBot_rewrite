@@ -9,28 +9,80 @@ import os
 colorama.init()
 load_dotenv()
 
+
 class Logger:
-    def __init__(self, cog):
-        self.name = cog
+    """
+    Handles logging
+    """
 
-    def _send(self, message, color):
-        print(colored(self._timestamp(), "cyan") + " [" + colored(self.name, "cyan") + "] " + colored(message, color))
+    def __init__(self, name):
+        """Creates logger object
 
-    def _timestamp(self):
+        Parameters
+        ----------
+        name : str
+            Name of the logging instance that shows up in the log (Usually the name of the cog/module)
+        """
+
+        self.name = name
+
+    def __send(self, message, color):
         now = datetime.now(tz=pytz.timezone(os.environ["TZ"]))
-        return now.strftime("%Y-%m-%d-%H:%M:%S")
+        timestamp = now.strftime("%Y-%m-%d-%H:%M:%S")
+        print(colored(timestamp, "cyan") +
+              " [" + colored(self.name, "cyan") + "] " + colored(message, color))
 
     def info(self, message):
-        self._send(message, "white")
+        """Sends log message with level INFO (white)
+
+        Parameters
+        ----------
+        message : str
+            Message to send
+        """
+
+        self.__send(message, "white")
 
     def warn(self, message):
-        self._send(message, "yellow")
+        """Sends log message with level WARN (yellow)
+
+        Parameters
+        ----------
+        message : str
+            Message to send
+        """
+
+        self.__send(message, "yellow")
 
     def error(self, message):
-        self._send(message, "red")
+        """Sends log message with level ERROR (red)
+
+        Parameters
+        ----------
+        message : str
+            Message to send
+        """
+
+        self.__send(message, "red")
 
     def debug(self, message):
-        self._send(message, "magenta")
+        """Sends log message with level DEBUG (magenta)
+
+        Parameters
+        ----------
+        message : str
+            Message to send
+        """
+
+        self.__send(message, "magenta")
 
     def success(self, message):
-        self._send(message, "green")
+        """Sends log message with level SUCCESS (green)
+
+        Parameters
+        ----------
+        message : str
+            Message to send
+        """
+
+        self.__send(message, "green")

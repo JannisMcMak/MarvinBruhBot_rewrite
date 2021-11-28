@@ -15,6 +15,14 @@ class Stats(commands.Cog):
 
     @commands.command(help="Create poll")
     async def poll(self, ctx, *topic):
+        """Creates a poll for others to vote on
+
+        Parameters
+        ----------
+        topic : *str
+            Topic of the poll
+        """
+
         emojis = ['YES', 'NO']
 
         host = ctx.author
@@ -33,8 +41,11 @@ class Stats(commands.Cog):
             emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
             await msg.add_reaction(emoji)
 
-    @commands.command(help="Counting leaderboard")
+
+    @commands.command()
     async def leaderboard(self, ctx):
+        """Gets statistics of counting channel from API and shows leaderboard"""
+
         r = requests.get(os.environ["COUNTING_API_LINK"])
         d = r.json()
 

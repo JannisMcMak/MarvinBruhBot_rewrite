@@ -15,11 +15,19 @@ class Audio(commands.Cog):
     """
     Plays audio from Mp3 files and Youtube
     """
+
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help='Play mp3 from file or youtube link')
+    @commands.command()
     async def play(self, ctx, name: str = "list"):
+        """Plays audio from file or Youtube link
+
+        Parameters
+        ----------
+        name : str, optional
+            Name of the file or link to Youtube video, by default "list" (lists available audio files)
+        """        
 
         if name == 'list':
             mp3s = os.listdir("mp3s/")
@@ -40,7 +48,7 @@ class Audio(commands.Cog):
 
         else:
             if name.startswith("https://"):
-                player = await yt.YTDLSource.from_url(name, loop=self.bot.loop)
+                player = await yt.YTDLSource.from_url(name, loop=self.bot.loop, stream=True)
                 log.info("YTDL title: " + player.title)
                 await yt.YTDLSource.play_in_channel(player, ctx.author.voice.channel)
             
@@ -52,16 +60,21 @@ class Audio(commands.Cog):
 
     @commands.command()
     async def bruh(self, ctx):
+        """Plays infamous audio clip"""        
+
         channel = ctx.author.voice.channel
         filename = 'mp3s/audio.mp3'
 
         await tts.play_in_channel(filename, channel)
 
-    @commands.command(help='Stop playing and disconnect')
+    @commands.command()
     async def disconnect(self, ctx):
+        """Stops playing current audio and disconnects bot"""        
+
         for voice_client in self.bot.voice_clients:
             voice_client.stop()
             await voice_client.disconnect()
+
 
 def setup(bot):
     bot.add_cog(Audio(bot))

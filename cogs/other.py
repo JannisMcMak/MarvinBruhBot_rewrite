@@ -21,16 +21,24 @@ class Other(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help="Random Simon Name Generator")
-    async def simon(self, ctx, arg=None):
+    @commands.command()
+    async def simon(self, ctx, action=None):
+        """Random Simon Name Generator
+
+        Parameters
+        ----------
+        action : str, optional
+            Additional action to perform. "voice" to play in voice, "all" to view all combinations, by default None
+        """        
+
         with open('hidden/simon_combinations.json', 'r') as f:
               data = json.load(f)
               combination = random.choice(data)
 
-        if arg is None:            
+        if action is None:            
             await ctx.send(" ".join(combination))
         
-        elif arg == "v" or arg == "voice":
+        elif action == "v" or action == "voice":
             filename = await tts.write_mp3("".join(combination), "de", True)
             await ctx.send(" ".join(combination))
             await tts.play_in_channel(filename, ctx.author.voice.channel)
@@ -38,19 +46,27 @@ class Other(commands.Cog):
             await ctx.send("Alle Kombinationen: " + os.environ["SIMON_COMBINATIONS_WEB_LINK"])
 
 
-    @commands.command(help="MC server utilities")
-    async def server(self, ctx, arg=None):
-        if arg == "ip":
+    @commands.command()
+    async def server(self, ctx, action="info"):
+        """Minecraft server utilities
+
+        Parameters
+        ----------
+        action : str, optional
+            Action to perform. "info" to show general info, "list" to list online players, "ip" to show IP-address, by default "info"
+        """
+
+        if action == "ip":
             await ctx.send(os.environ["MC_SERVER_IP"])
 
-        elif arg == "list":
+        elif action == "list":
             r = requests.get("https://api.mcsrvstat.us/2/" + os.environ["MC_SERVER_IP"])
             r = r.json()
             p = r["players"]
 
             await ctx.send("Online Players: " + ", ".join(p["list"]))
 
-        else:
+        elif action == "info":
             r = requests.get("https://api.mcsrvstat.us/2/" + os.environ["MC_SERVER_IP"])
             r = r.json()
 
@@ -69,9 +85,22 @@ class Other(commands.Cog):
 
                     await ctx.send("Request sent!")
 
+        else:
+            await ctx.send("Unknown action. Try `info`, `ip` or `list`")
 
-    @commands.command(help="Wake up someone")
+
+    @commands.command()
     async def wake(self, ctx, user: discord.Member, count: int = 3):
+        """Move someone between voice channel to wake them up
+
+        Parameters
+        ----------
+        user : discord.Member
+            User to move. Used with mention (@user)
+        count : int, optional
+            Number of times to move the user, by default 3, max 10
+        """
+
         channels = ctx.guild.voice_channels
         user_channel = user.voice.channel
 
@@ -102,6 +131,14 @@ class Other(commands.Cog):
 
     @commands.command(help='Gedichte von Dichtern')
     async def gedicht(self, ctx, i: int = 0):
+        """Plays text from 'gedichte.json' file
+
+        Parameters
+        ----------
+        i : int, optional
+            Index of text entry. 0 for random, by default 0
+        """
+
         text = await util.utilities.get_gedicht(i)
 
         filename = await tts.write_mp3(text, "de", True)

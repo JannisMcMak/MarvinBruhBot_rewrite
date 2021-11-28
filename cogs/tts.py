@@ -10,26 +10,58 @@ class TTS(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help='TTS German')
+    @commands.command()
     async def versuh(self, ctx, *text):
+        """Plays TTS message in German
+
+        Parameters
+        ----------
+        text : str
+            Message to play
+        """
+
         filename = await tts.write_mp3(text)
 
         await tts.play_in_channel(filename, ctx.author.voice.channel)
 
-    @commands.command(help='TTS English')
+    @commands.command()
     async def versuhe(self, ctx, *text):
+        """Plays TTS message in English
+
+        Parameters
+        ----------
+        text : str
+            Message to play
+        """
+
         filename = await tts.write_mp3(text, "eng")
 
         await tts.play_in_channel(filename, ctx.author.voice.channel)
 
-    @commands.command(help='TTS Indian')
+    @commands.command()
     async def versuhi(self, ctx, *text):
+        """Plays TTS message in English (with Indian accent)
+
+        Parameters
+        ----------
+        text : str
+            Message to play
+        """
+
         filename = await tts.write_mp3(text, "ind")
 
         await tts.play_in_channel(filename, ctx.author.voice.channel)
 
-    @commands.command(help='Twitch TTS')
+    @commands.command()
     async def versuht(self, ctx, *text):
+        """Plays TTS message with Brian's voice (from Twitch donation messages)
+
+        Parameters
+        ----------
+        text : str
+            Message to play
+        """
+
         filename = await tts.write_mp3_twitch(text)
         
         if filename != None:

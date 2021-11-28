@@ -13,8 +13,10 @@ class Minigames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(help="Jost sein schönes Rock, Paper Scissors game")
+    @commands.command()
     async def cps(self, ctx):
+        """Rock, Paper Scissors in nsfw (developed by Professor)"""
+
         def gewinner(wahl, computer, wahl_emote):
             ergebnis = (wahl - computer) % 3
             if ergebnis == 0:

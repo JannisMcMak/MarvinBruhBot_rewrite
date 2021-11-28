@@ -18,12 +18,15 @@ class Events(commands.Cog):
     """
     Event and error handling (Nothing to see here)
     """
+
     def __init__(self, bot):
         self.bot = bot
         load_dotenv()
 
     @commands.Cog.listener()
     async def on_ready(self):
+        """Event that gets called while bot is starting"""
+
         log.success("|========================================================================|")
 
         log.info("Loading...")
@@ -39,9 +42,10 @@ class Events(commands.Cog):
         log.success("|========================================================================|")
 
 
-    #Event to change Rich Presence to called game
     @commands.Cog.listener()
     async def on_message(self, message):
+        """Event that gets called when any message is received. Used to change Rich Presence to requested game"""
+
         game_ping_channels = os.environ["GAME_TEXT_CHANNELS"].split(",")
         for channel in game_ping_channels:
             game_ping_channels[game_ping_channels.index(channel)] = int(channel)
@@ -53,11 +57,11 @@ class Events(commands.Cog):
                     log.info("Presence has been changed to " + role.name)
                     await self.bot.change_presence(activity=discord.Game(name=role.name))
 
-        #await self.bot.process_commands(message)
-
 
     @commands.Cog.listener()
     async def on_command(self, ctx: commands.Context):
+        """Event that gets called whenever a command is invoked by a user"""
+
         try:
             log = Logger(ctx.cog.qualified_name)
         except:
@@ -71,6 +75,8 @@ class Events(commands.Cog):
     #Error handling
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
+        """Event that gets called when an error occurs while executing a command"""
+
         log.error(str(error))
         log.debug(type(error))
 
@@ -92,7 +98,9 @@ class Events(commands.Cog):
     #Event to monitor user voice activity
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
-        if member.id == int(os.environ["SIMON_TRACKED_USER"]):
+        """Event that gets called when the voice state of any user changes"""
+
+        if member.id == int(os.environ["TRACKED_USER"]):
             if after.channel is not None and before.self_mute == after.self_mute and before.self_deaf == after.self_deaf:
                 if before.self_stream == after.self_stream and before.self_video == after.self_video:
                     log.info("Simon joined channel: " + after.channel.name)

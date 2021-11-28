@@ -95,6 +95,7 @@ class Help(commands.Cog):
                     for command in self.bot.get_cog(cog).get_commands():
                         # if cog is not hidden
                         if not command.hidden:
+
                             emb.add_field(name=f"`{prefix}{command.name}`", value=command.help, inline=False)
                     # found cog - breaking loop
                     break

@@ -28,8 +28,10 @@ class Tasks(commands.Cog):
             self.time_loop.start()
 
 
-    @commands.command(help="Toggle hourly time notifications")
+    @commands.command()
     async def uhr(self, ctx):
+        """Toggles hourly time notifications"""
+
         if self.time_loop.is_running() and not self.time_loop.is_being_cancelled():
             log.info("Hourly notifications enabled!")
             self.time_loop.start()
@@ -41,6 +43,8 @@ class Tasks(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def time_loop(self):
+        """Loop that performs hourly time notifications"""
+
         minutes = (datetime.now(tz=pytz.timezone(os.environ["TZ"]))).strftime('%M')
         if "00" in minutes:
             hour = (datetime.now(tz=pytz.timezone(os.environ["TZ"]))).strftime('%I')
@@ -63,8 +67,17 @@ class Tasks(commands.Cog):
                 await tts.play_in_channel(filename, channel)
 
 
-    @commands.command(help="Rocket League tournament notifications")
+    @commands.command()
     async def tournament(self, ctx, action: str = "toggle", time: str = os.environ["RL_TOURNAMENT_TIME"]):
+        """Manages Rocket League tournament notifications
+
+        Parameters
+        ----------
+        action : str, optional
+            Action to perform, e.g. "enable/disable" or "activate/deactivate. "info" to show general information. By default "toggle"
+        time : str, optional
+            [description], by default os.environ["RL_TOURNAMENT_TIME"]
+        """
 
         async def start_loop():
             self.rl_tournament_time = time
@@ -108,6 +121,8 @@ class Tasks(commands.Cog):
 
     @tasks.loop(seconds=60)
     async def tournament_notifier(self, intervals, user, team_ids):   
+        """Loop that performs Rocket League tournament notifications"""
+
         for interval in intervals:
             current_time = (datetime.now(tz=pytz.timezone(os.environ["TZ"])) + timedelta(hours=0, minutes=interval)).strftime('%H:%M')
 
