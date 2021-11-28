@@ -6,13 +6,15 @@ import asyncio
 
 
 class Minigames(commands.Cog):
+    """
+    Fun Minigames. Mainly developed by Professor
+    """
+
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(help="Jost sein schönes Rock, Paper Scissors game")
     async def cps(self, ctx):
-        """hurensohn"""
-
         def gewinner(wahl, computer, wahl_emote):
             ergebnis = (wahl - computer) % 3
             if ergebnis == 0:

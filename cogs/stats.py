@@ -6,6 +6,10 @@ import os
 
 
 class Stats(commands.Cog):
+    """
+    Shows statistics
+    """
+
     def __init__(self, bot):
         self.bot = bot
 

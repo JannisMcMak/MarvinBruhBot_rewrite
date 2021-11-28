@@ -15,12 +15,17 @@ log = Logger('Events')
 
 
 class Events(commands.Cog):
+    """
+    Event and error handling (Nothing to see here)
+    """
     def __init__(self, bot):
         self.bot = bot
         load_dotenv()
 
     @commands.Cog.listener()
     async def on_ready(self):
+        log.success("|========================================================================|")
+
         log.info("Loading...")
         log.debug("Running with PID " + str(os.getpid()))
         log.success(f'{self.bot.user} has connected to Discord!')
@@ -30,6 +35,8 @@ class Events(commands.Cog):
             n.append(g.name)
 
         log.info("Servers: " + ", ".join(n))
+
+        log.success("|========================================================================|")
 
 
     #Event to change Rich Presence to called game
@@ -74,7 +81,7 @@ class Events(commands.Cog):
 
         elif "Already connected to a voice channel" in str(error):
             await ctx.send("Already connected to a channel.")
-            
+
         elif "object has no attribute" in str(error):
             await ctx.send("Please connect to a voice channel first.")
         

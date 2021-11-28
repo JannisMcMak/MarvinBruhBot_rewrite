@@ -13,6 +13,10 @@ log = util.logger.Logger('Tasks')
 
 
 class Tasks(commands.Cog):
+    """
+    Performs repeating tasks
+    """
+
     def __init__(self, bot):
         load_dotenv()
 

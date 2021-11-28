@@ -5,6 +5,10 @@ import util
 
 
 class Bitch(commands.Cog):
+    """
+    Plays custom Bitch voicelines
+    """
+
     def __init__(self, bot):
         self.bot = bot
 

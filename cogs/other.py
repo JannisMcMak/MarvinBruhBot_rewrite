@@ -14,6 +14,10 @@ log = util.logger.Logger('Other')
 
 
 class Other(commands.Cog):
+    """
+    Miscellaneous commands
+    """
+
     def __init__(self, bot):
         self.bot = bot
 

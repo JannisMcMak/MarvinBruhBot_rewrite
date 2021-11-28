@@ -12,6 +12,9 @@ log = util.logger.Logger('Mp3s')
 
 
 class Audio(commands.Cog):
+    """
+    Plays audio from Mp3 files and Youtube
+    """
     def __init__(self, bot):
         self.bot = bot
 

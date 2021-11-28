@@ -14,8 +14,9 @@ intents.members = True
 load_dotenv()
 TOKEN = os.environ['BOT_TOKEN']
 
-bot = commands.Bot(command_prefix='#', case_insensitive=True, intents=intents)
+bot = commands.Bot(command_prefix=os.environ["COMMAND_PREFIX"], case_insensitive=True, intents=intents)
 
+bot.remove_command('help')
 
 
 def clear_cache():
@@ -34,14 +35,15 @@ def clear_cache():
 clear_cache()
 
 
-bot.load_extension("cogs.admin")
-bot.load_extension("cogs.bitch")
-bot.load_extension("cogs.audio")
-bot.load_extension("cogs.other")
-bot.load_extension("cogs.stats")
 bot.load_extension("cogs.tts")
-bot.load_extension("cogs.events")
-bot.load_extension("cogs.tasks")
+bot.load_extension("cogs.audio")
+bot.load_extension("cogs.bitch")
 bot.load_extension("cogs.minigames")
+bot.load_extension("cogs.stats")
+bot.load_extension("cogs.other")
+bot.load_extension("cogs.tasks")
+bot.load_extension("cogs.admin")
+bot.load_extension("cogs.events")
+bot.load_extension("cogs.help")
 
 bot.run(TOKEN)

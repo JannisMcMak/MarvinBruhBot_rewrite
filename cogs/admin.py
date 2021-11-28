@@ -10,6 +10,9 @@ log = Logger('Admin')
 
 
 class Administration(commands.Cog):
+    """
+    Utility commands for administration
+    """
     def __init__(self, bot):
         self.bot = bot
         load_dotenv()

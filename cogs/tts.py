@@ -3,6 +3,10 @@ import util.tts_util as tts
 
 
 class TTS(commands.Cog):
+    """
+    Plays Text To Speech messages
+    """
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -32,7 +36,7 @@ class TTS(commands.Cog):
             await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
             await ctx.send('Text was too long')
-            
+
 
 def setup(bot):
     bot.add_cog(TTS(bot))
