@@ -69,6 +69,22 @@ class TTS(commands.Cog):
         else:
             await ctx.send('Text was too long')
 
+    @commands.command()
+    async def versuhp(self, ctx, *text):
+        """Plays TTS message with german female voice
+
+        Parameters
+        ----------
+        text : str
+            Message to play
+        """
+
+        filename = await tts.write_mp3_ibm(text, lang="p")
+        
+        if filename != None:
+            await tts.play_in_channel(filename, ctx.author.voice.channel)
+        else:
+            await ctx.send('Text was too long')
 
 def setup(bot):
     bot.add_cog(TTS(bot))

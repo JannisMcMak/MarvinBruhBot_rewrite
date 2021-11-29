@@ -12,7 +12,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 load_dotenv()
-TOKEN = os.environ['BOT_TOKEN']
+TOKEN = os.environ['TEST_BOT_TOKEN']
 
 bot = commands.Bot(
     command_prefix=os.environ["COMMAND_PREFIX"], case_insensitive=True, intents=intents)
@@ -31,7 +31,7 @@ def clear_cache():
             if os.path.isfile(file_path) or os.path.islink(file_path):
                 os.unlink(file_path)
             elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
+                shutil.rmtree(file_path)
         except Exception as e:
             log.error('Error clearing cache: {}'.format(e))
 

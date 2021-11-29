@@ -1,10 +1,16 @@
 import discord
+from ibm_cloud_sdk_core import authenticators
 
 import requests
 import json
 import time
 import asyncio
 import os.path
+from dotenv import load_dotenv
+import os
+load_dotenv()
+from ibm_watson import TextToSpeechV1
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 from util.logger import Logger
 
@@ -78,6 +84,48 @@ async def write_mp3(text, lang: str = "de", formatted: bool = False):
 
     filename = 'cache/{}.mp3'.format(time.time())
     open(filename, 'wb').write(r.content)
+
+    return filename
+
+async def write_mp3_ibm(text, lang: str = "de", formatted: bool = False):
+    """Uses an API to write an Mp3 file to a temporary folder containing a TTS message
+
+    Parameters
+    ----------
+    text : str or list[str]
+        The text to convert to TTS
+    lang : str, optional
+        The language of the TTS message. Allowed are "p"
+    formatted : bool, optional
+        Whether the text is already a string. Set to False if the text is passed as a list of strings. By default False
+
+    Returns
+    -------
+    str
+        Path to the Mp3 file containing the TTS message
+    """
+
+    if not formatted:
+        text = ' '.join(text)
+    log.info(text)
+
+    authenticator = IAMAuthenticator(f'{os.environ["IBM_TTS_API_KEY"]}')
+    ibm_tts = TextToSpeechV1(authenticator=authenticator)
+    ibm_tts.set_service_url(f'{os.environ["IBM_TTS_API_LINK"]}')
+    
+    voice = ""
+    if lang == "p":
+        voice = "de-DE_BirgitV3Voice"
+       
+
+    filename = 'cache/{}.mp3'.format(time.time())
+    
+    with open(filename, 'wb') as audio_file:
+        audio_file.write(ibm_tts.synthesize(
+            text,
+            voice=voice,
+            accept='audio/mp3'
+        ).get_result().content)
 
     return filename
 
