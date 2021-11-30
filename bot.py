@@ -12,7 +12,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 load_dotenv()
-TOKEN = os.environ['TEST_BOT_TOKEN2']
+TOKEN = os.environ['BOT_TOKEN']
 
 bot = commands.Bot(
     command_prefix=os.environ["COMMAND_PREFIX"], case_insensitive=True, intents=intents)

@@ -47,7 +47,7 @@ def ascii(text, size: int = 15, invert = False):
         List of rows containing the ascii art
     """
 
-    font = ImageFont.truetype('arialbd.ttf', size) #load the font
+    font = ImageFont.truetype('util/fonts/arialbd.ttf', size) #load the font
     size = font.getsize(text)#calc the size of text in pixe
   
     image = Image.new('1', size, 1)  #create a b/w image
