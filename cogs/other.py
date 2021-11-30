@@ -129,9 +129,9 @@ class Other(commands.Cog):
         await user.move_to(user_channel)
 
 
-    @commands.command(help='Gedichte von Dichtern')
+    @commands.command()
     async def gedicht(self, ctx, i: int = 0):
-        """Plays text from 'gedichte.json' file
+        """Plays random Gedicht
 
         Parameters
         ----------
@@ -145,6 +145,32 @@ class Other(commands.Cog):
         channel = ctx.author.voice.channel
 
         await tts.play_in_channel(filename, channel)
+
+
+    @commands.command()
+    async def ascii(self, ctx, text: str, size: int = 15, invert: bool = False):
+        """Print ascii art from text
+
+        Parameters
+        ----------
+        text : str
+            Text to print
+        size : int, optional
+            Size of the ascii art (pt), by default 15
+        invert : bool, optional
+            Whether the ascii art should be inverted, by default False
+        """
+
+        rows = util.utilities.ascii(text, size, invert)
+
+        text = "```\n"
+        for row in rows:
+            if not row.isspace() and any(c not in "#" for c in row):
+                text += row + "\n"
+
+        text += "```"
+
+        await ctx.send(text)
 
 
 def setup(bot):

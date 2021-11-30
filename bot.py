@@ -12,12 +12,12 @@ intents = discord.Intents.default()
 intents.members = True
 
 load_dotenv()
-TOKEN = os.environ['BOT_TOKEN']
+TOKEN = os.environ['TEST_BOT_TOKEN2']
 
 bot = commands.Bot(
     command_prefix=os.environ["COMMAND_PREFIX"], case_insensitive=True, intents=intents)
 
-bot.remove_command('help')
+#bot.remove_command('help')
 
 
 def clear_cache():
@@ -48,6 +48,6 @@ bot.load_extension("cogs.other")
 bot.load_extension("cogs.tasks")
 bot.load_extension("cogs.admin")
 bot.load_extension("cogs.events")
-bot.load_extension("cogs.help")
+#bot.load_extension("cogs.help")
 
 bot.run(TOKEN)
