@@ -103,13 +103,11 @@ class Events(commands.Cog):
         if member.id == int(os.environ["TRACKED_USER"]):
             if after.channel is not None and before.self_mute == after.self_mute and before.self_deaf == after.self_deaf:
                 if before.self_stream == after.self_stream and before.self_video == after.self_video:
-                    log.info("Simon joined channel: " + after.channel.name)
+                    log.info("Tracked user joined channel: " + after.channel.name)
 
-                    with open('hidden/simon_combinations.json', 'r') as f:
-                        data = json.load(f)
-                        combination = random.choice(data)
+                    combination = utilities.get_random_name_combination()
 
-                    filename = await tts.write_mp3(" ".join(combination), "de", True)
+                    filename = await tts.write_mp3(combination, "de", True)
                     await tts.play_in_channel(filename, after.channel)
 
 def setup(bot):

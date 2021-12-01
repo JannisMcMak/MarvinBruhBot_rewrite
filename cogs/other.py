@@ -31,16 +31,15 @@ class Other(commands.Cog):
             Additional action to perform. "voice" to play in voice, "all" to view all combinations, by default None
         """        
 
-        with open('hidden/simon_combinations.json', 'r') as f:
-              data = json.load(f)
-              combination = random.choice(data)
+        combination = util.utilities.get_random_name_combination()
+        combination_toprint = combination.replace("ä", "e")
 
         if action is None:            
-            await ctx.send(" ".join(combination))
+            await ctx.send(combination_toprint)
         
         elif action == "v" or action == "voice":
-            filename = await tts.write_mp3("".join(combination), "de", True)
-            await ctx.send(" ".join(combination))
+            filename = await tts.write_mp3(combination, "de", True)
+            await ctx.send(combination_toprint)
             await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
             await ctx.send("Alle Kombinationen: " + os.environ["SIMON_COMBINATIONS_WEB_LINK"])
