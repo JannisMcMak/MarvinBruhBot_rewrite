@@ -3,6 +3,7 @@ import discord
 import os
 import shutil
 from dotenv import load_dotenv
+import sys
 
 from util.logger import Logger
 
@@ -12,10 +13,16 @@ intents = discord.Intents.default()
 intents.members = True
 
 load_dotenv()
-TOKEN = os.environ['BOT_TOKEN']
+
+if len(sys.argv) > 1 and sys.argv[1] == "test":
+    PREFIX = "."
+    TOKEN = os.environ['TEST_BOT_TOKEN2']
+else:
+    PREFIX = os.environ["COMMAND_PREFIX"]
+    TOKEN = os.environ['BOT_TOKEN']
 
 bot = commands.Bot(
-    command_prefix=os.environ["COMMAND_PREFIX"], case_insensitive=True, intents=intents)
+    command_prefix=PREFIX, case_insensitive=True, intents=intents)
 
 #bot.remove_command('help')
 

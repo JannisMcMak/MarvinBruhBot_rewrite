@@ -12,9 +12,10 @@ class Minigames(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.cps_streak = 0
 
     @commands.command()
-    async def cps(self, ctx):
+    async def cps(self, ctx, streak = 0):
         """Rock, Paper Scissors in nsfw (developed by Professor)"""
 
         def gewinner(wahl, computer, wahl_emote):
@@ -24,14 +25,17 @@ class Minigames(commands.Cog):
                     embed.set_footer(text ="Cock on cock? Seems kinda gay tbh...", icon_url ="https://web.jsrv.club/%E2%9C%94/thonk.png")
                 embed.add_field(name=f"{wahl_emote} gleicht {computer_emote}", value=f"Unentschieden!", inline=False)
                 embed.colour = 0xf6b26b
+                self.cps_streak = 0
 
             elif ergebnis == 1:
                 embed.add_field(name=f"{wahl_emote} schlägt {computer_emote}", value="Du hast gewonnen", inline=False)
                 embed.colour = 0x38761d
+                self.cps_streak += 1
 
             elif ergebnis == 2:
-                embed.add_field(name=f"{computer_emote} schlägt {wahl_emote}", value="Der Computer hat gewonnen", inline=False)
+                embed.add_field(name=f"{computer_emote} schlägt {wahl_emote}", value=f"{self.bot.user.name} hat gewonnen", inline=False)
                 embed.colour = 0xbd3e34
+                self.cps_streak = 0
 
 
 
@@ -55,6 +59,13 @@ class Minigames(commands.Cog):
         embed.add_field(name="🍆 Cock", value="schlägt Petra.", inline=False)
         embed.add_field(name="🤰 Petra", value="schlägt Sophia.", inline=False)
         embed.add_field(name="💕 Sophia", value="schlägt Cock.", inline=False)
+
+        
+        self.cps_streak = streak
+        
+        if self.cps_streak > 0:
+            embed.add_field(name="Winning streak", value=str(streak), inline=True)
+            #embed.add_field(name="Dein Highscore", value="123", inline=True)
 
         message = await ctx.send(embed=embed)
         await message.add_reaction("🍆")
@@ -110,7 +121,7 @@ class Minigames(commands.Cog):
             return
 
         if str(reaction.emoji) == "🔁":
-            await ctx.invoke(self.bot.get_command("cps"))
+            await ctx.invoke(self.bot.get_command("cps"), streak=self.cps_streak)
 
 def setup(bot):
     bot.add_cog(Minigames(bot))
