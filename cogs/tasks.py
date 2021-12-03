@@ -91,7 +91,7 @@ class Tasks(commands.Cog):
 
             log.info("Starting RL tournament notifier for tournament at {}...".format(time))
             await ctx.send("Starting RL tournament notifier...")
-            self.tournament_notifier.start(user=ctx.author, intervals=intervals, team_ids=team_ids)        
+            self.tournament_notifier.start(ctx=ctx, intervals=intervals, team_ids=team_ids)        
         
         async def stop_loop():
             log.info("Stopping RL tournament notifier...")
@@ -120,7 +120,7 @@ class Tasks(commands.Cog):
             
 
     @tasks.loop(seconds=60)
-    async def tournament_notifier(self, intervals, user, team_ids):   
+    async def tournament_notifier(self, intervals, ctx, team_ids):   
         """Loop that performs Rocket League tournament notifications"""
 
         for interval in intervals:
@@ -139,19 +139,19 @@ class Tasks(commands.Cog):
                 else:
                     text = text.format(str(int(interval / 60)) + " hours!")
 
-                try:
-                    channel = user.voice.channel
-                    voice_states = channel.voice_states
-                except:
-                    channel = None
-                    voice_states = {}
-                
 
-                for team_id in team_ids:
-                    if team_id not in voice_states:
-                        member = discord.utils.get(self.bot.get_all_members(), id=team_id)
+                channel = None
+                voice_channels = []
+                for team_member_id in team_ids:
+                    try:
+                        member = ctx.guild.get_member(team_member_id)
+                        channel = member.voice.channel
+                        voice_channels.append(channel)
+                        print(channel)
+                    except:
                         await member.send(text)
-
+                        
+                        
                 filename = await tts.write_mp3_twitch(text, True)
                 await tts.play_in_channel(filename, channel)
 
