@@ -6,9 +6,8 @@ import json
 import time
 import asyncio
 import os.path
-from dotenv import load_dotenv
+import config
 import os
-load_dotenv()
 from ibm_watson import TextToSpeechV1
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
@@ -109,9 +108,9 @@ async def write_mp3_ibm(text, lang: str = "de", formatted: bool = False):
         text = ' '.join(text)
     log.info(text)
 
-    authenticator = IAMAuthenticator(f'{os.environ["IBM_TTS_API_KEY"]}')
+    authenticator = IAMAuthenticator(f'{config.IBM_TTS_API_KEY}')
     ibm_tts = TextToSpeechV1(authenticator=authenticator)
-    ibm_tts.set_service_url(f'{os.environ["IBM_TTS_API_LINK"]}')
+    ibm_tts.set_service_url(f'{config.IBM_TTS_API_URL}')
     
     voice = ""
     if lang == "p":
@@ -153,7 +152,7 @@ async def write_mp3_twitch(text, formatted: bool = False):
     if len(text.encode('utf-8')) >= 550:
         return None
 
-    base_url = 'https://us-central1-sunlit-context-217400.cloudfunctions.net/streamlabs-tts'
+    base_url = config.TWITCH_TTS_API_URL
     data = {"voice": "Brian", "text": text}
 
     r = requests.post(base_url.format(text), data)

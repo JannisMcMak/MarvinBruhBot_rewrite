@@ -3,8 +3,7 @@ from discord.ext import commands, tasks
 
 from datetime import datetime, timedelta
 import pytz
-from dotenv import load_dotenv
-import os
+import config
 
 import util
 import util.tts_util as tts
@@ -18,12 +17,10 @@ class Tasks(commands.Cog):
     """
 
     def __init__(self, bot):
-        load_dotenv()
-
         self.bot = bot
-        self.rl_tournament_time = os.environ["RL_TOURNAMENT_TIME"]
+        self.rl_tournament_time = config.RL_TOURNAMENT_TIME
 
-        if os.environ["HOURLY_TIME_NOTIFICATIONS"] == "yes":
+        if config.TIME_NOTIFICATIONS_BY_DEFAULT:
             log.debug("Hourly time notifications enabled!")
             self.time_loop.start()
 
@@ -45,15 +42,15 @@ class Tasks(commands.Cog):
     async def time_loop(self):
         """Loop that performs hourly time notifications"""
 
-        minutes = (datetime.now(tz=pytz.timezone(os.environ["TZ"]))).strftime('%M')
+        minutes = (datetime.now(tz=pytz.timezone(config.TZ))).strftime('%M')
         if "00" in minutes:
-            hour = (datetime.now(tz=pytz.timezone(os.environ["TZ"]))).strftime('%I')
+            hour = (datetime.now(tz=pytz.timezone(config.TZ))).strftime('%I')
 
             text = await util.utilities.get_time_notification(int(hour))
 
             guild = None
             for g in self.bot.guilds:
-                if g.id == int(os.environ["MAIN_GUILD"]):
+                if g.id == config.MAIN_GUILD:
                     guild = g
 
             channel = None
@@ -68,7 +65,7 @@ class Tasks(commands.Cog):
 
 
     @commands.command()
-    async def tournament(self, ctx, action: str = "toggle", time: str = os.environ["RL_TOURNAMENT_TIME"]):
+    async def tournament(self, ctx, action: str = "toggle", time: str = config.RL_TOURNAMENT_TIME):
         """Manages Rocket League tournament notifications
 
         Parameters
@@ -76,14 +73,14 @@ class Tasks(commands.Cog):
         action : str, optional
             Action to perform, e.g. "enable/disable" or "activate/deactivate. "info" to show general information. By default "toggle"
         time : str, optional
-            [description], by default os.environ["RL_TOURNAMENT_TIME"]
+            The time when the tournament starts, by default 23:00
         """
 
         async def start_loop():
             self.rl_tournament_time = time
 
-            intervals = os.environ["RL_TOURNAMENT_INTERVALS"].split(",")
-            team_ids = os.environ["RL_TOURNAMENT_TEAM_IDS"].split(",")
+            intervals = config.RL_TOURNAMENT_INTERVALS
+            team_ids = config.RL_TEAM_MEMBER_IDS
             for i in intervals:
                 intervals[intervals.index(i)] = int(i)
             for i in team_ids:
@@ -124,7 +121,7 @@ class Tasks(commands.Cog):
         """Loop that performs Rocket League tournament notifications"""
 
         for interval in intervals:
-            current_time = (datetime.now(tz=pytz.timezone(os.environ["TZ"])) + timedelta(hours=0, minutes=interval)).strftime('%H:%M')
+            current_time = (datetime.now(tz=pytz.timezone(config.TZ)) + timedelta(hours=0, minutes=interval)).strftime('%H:%M')
 
             if current_time == self.rl_tournament_time:
                 text = "Attention epic Rocket League gamers! The tournament starts in {}"

@@ -3,12 +3,9 @@ from dotenv.main import load_dotenv
 from termcolor import colored
 from datetime import datetime
 import pytz
-from dotenv import load_dotenv
-import os
+import config
 
 colorama.init()
-load_dotenv()
-
 
 class Logger:
     """
@@ -27,7 +24,7 @@ class Logger:
         self.name = name
 
     def __send(self, message, color):
-        now = datetime.now(tz=pytz.timezone(os.environ["TZ"]))
+        now = datetime.now(tz=pytz.timezone(config.TZ))
         timestamp = now.strftime("%Y-%m-%d-%H:%M:%S")
         print(colored(timestamp, "cyan") +
               " [" + colored(self.name, "cyan") + "] " + colored(message, color))

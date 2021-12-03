@@ -3,8 +3,7 @@ from discord.ext import commands
 from discord.errors import Forbidden
 
 from dotenv import load_dotenv
-import os
-load_dotenv()
+import config
 
 async def send_embed(ctx, embed):
     try:
@@ -30,11 +29,11 @@ class Help(commands.Cog):
         """Shows all modules of that bot"""
 	
         # !SET THOSE VARIABLES TO MAKE THE COG FUNCTIONAL!
-        prefix = "#"
+        prefix = config.BOT_PREFIX
         version = "1.8.7"
         
         # setting owner name - if you don't wanna be mentioned remove line 49-60 and adjust help text (line 88) 
-        owner = int(os.environ["ADMIN_USER"])
+        owner = config.ADMIN_USERS[0]
         owner_name = "JannisMcMak"
         owner_name2 = "Professor"
 
@@ -50,7 +49,7 @@ class Help(commands.Cog):
 
             # starting to build embed
             emb = discord.Embed(title='Commands and modules', color=discord.Color.blue(),
-                                description=f'Use `{os.environ["COMMAND_PREFIX"]}help <module>` to gain more information about that module')
+                                description=f'Use `{prefix}help <module>` to gain more information about that module')
 
             # iterating trough cogs, gathering descriptions
             cogs_desc = ''

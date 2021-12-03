@@ -4,8 +4,7 @@ import random
 import json
 import os
 
-from dotenv import load_dotenv
-
+import config
 import util.tts_util as tts
 import util.utilities as utilities
 from util.logger import Logger
@@ -21,7 +20,6 @@ class Events(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        load_dotenv()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -46,7 +44,7 @@ class Events(commands.Cog):
     async def on_message(self, message):
         """Event that gets called when any message is received. Used to change Rich Presence to requested game"""
 
-        game_ping_channels = os.environ["GAME_TEXT_CHANNELS"].split(",")
+        game_ping_channels = config.GAME_PING_CHANNELS
         for channel in game_ping_channels:
             game_ping_channels[game_ping_channels.index(channel)] = int(channel)
 
@@ -100,15 +98,16 @@ class Events(commands.Cog):
     async def on_voice_state_update(self, member, before, after):
         """Event that gets called when the voice state of any user changes"""
 
-        if member.id == int(os.environ["TRACKED_USER"]):
+        if member.id in config.TRACKED_USERS:
             if after.channel is not None and before.self_mute == after.self_mute and before.self_deaf == after.self_deaf:
                 if before.self_stream == after.self_stream and before.self_video == after.self_video:
-                    log.info("Tracked user joined channel: " + after.channel.name)
+                    log.info("Tracked user (" + member.name + ") joined channel: " + after.channel.name)
 
                     combination = utilities.get_random_name_combination()
 
                     filename = await tts.write_mp3(combination, "de", True)
                     await tts.play_in_channel(filename, after.channel)
+
 
 def setup(bot):
     bot.add_cog(Events(bot))

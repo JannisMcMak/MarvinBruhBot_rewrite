@@ -1,10 +1,10 @@
 from discord.ext import commands, tasks
-from dotenv import load_dotenv
-import os
 import signal
 from watchgod import awatch
+import os
 
 from util.logger import Logger
+import config
 
 log = Logger('Admin')
 
@@ -16,9 +16,8 @@ class Administration(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        load_dotenv()
 
-        if os.environ["DEV"] == "yes":
+        if config.DEV_MODE_BY_DEFAULT:
             log.debug("Watchtower enabled!")
             self.watchtower.start()
 
@@ -26,7 +25,7 @@ class Administration(commands.Cog):
     async def restart(self, ctx):
         """Restarts the container"""        
 
-        if ctx.author.id == int(os.environ["ADMIN_USER"]):
+        if ctx.author.id in config.ADMIN_USERS:
             log.warn("Restarting container...")
 
             os.kill(os.getpid(), signal.SIGTERM)
@@ -51,7 +50,7 @@ class Administration(commands.Cog):
             Cog(s) to reload
         """        
 
-        if ctx.author.id == int(os.environ["ADMIN_USER"]):
+        if ctx.author.id in config.ADMIN_USERS:
             log.warn("Reloading cogs: " + ", ".join(cogs))
 
             for cog in cogs:

@@ -3,7 +3,7 @@ import discord
 
 import requests
 import os
-import json
+import config
 import random
 import asyncio
 
@@ -42,7 +42,7 @@ class Other(commands.Cog):
             await ctx.send(combination_toprint)
             await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
-            await ctx.send("Alle Kombinationen: " + os.environ["SIMON_COMBINATIONS_WEB_LINK"])
+            await ctx.send("Alle Kombinationen: " + config.NAME_COMBINATIONS_URL)
 
 
     @commands.command()
@@ -56,17 +56,17 @@ class Other(commands.Cog):
         """
 
         if action == "ip":
-            await ctx.send(os.environ["MC_SERVER_IP"])
+            await ctx.send(config.MC_SERVER_IP)
 
         elif action == "list":
-            r = requests.get("https://api.mcsrvstat.us/2/" + os.environ["MC_SERVER_IP"])
+            r = requests.get("https://api.mcsrvstat.us/2/" + config.MC_SERVER_IP)
             r = r.json()
             p = r["players"]
 
             await ctx.send("Online Players: " + ", ".join(p["list"]))
 
         elif action == "info":
-            r = requests.get("https://api.mcsrvstat.us/2/" + os.environ["MC_SERVER_IP"])
+            r = requests.get("https://api.mcsrvstat.us/2/" + config.MC_SERVER_IP)
             r = r.json()
 
             status = r["online"]
@@ -80,7 +80,7 @@ class Other(commands.Cog):
                 msg = await self.bot.wait_for('message', check=lambda message: message.author == ctx.author and message.channel.id == ctx.channel.id)
                 if msg.content.lower() in ["yes", "y"]:
                     r = requests.post("https://push.techulus.com/api/v1/notify/{}?title={}&body={}".format(
-                        os.environ['PUSH_API_KEY'], "Server Request", "by " + ctx.author.name))
+                        config.PUSH_API_KEY, "Server Request", "by " + ctx.author.name))
 
                     await ctx.send("Request sent!")
 
@@ -129,16 +129,27 @@ class Other(commands.Cog):
 
 
     @commands.command()
-    async def gedicht(self, ctx, i: int = 0):
+    async def gedicht(self, ctx, index: str = "0"):
         """Plays random Gedicht
 
         Parameters
         ----------
-        i : int, optional
-            Index of text entry. 0 for random, by default 0
+        i : str, optional
+            Index of text entry. 0 for random. Can also be "list" to show available text entries, by default 0
         """
 
-        text = await util.utilities.get_gedicht(i)
+        try:
+            text = util.utilities.get_gedicht(int(index))
+        except:
+            gedichte = util.utilities.get_gedicht(0, True)
+            embed=discord.Embed(title="Liste aller Gedichte", description="von bekannten Dichtern wie DetlefJoost oder The Wok", color=0x01cdfe)
+            embed.set_footer(text="#gedicht <index> für ein bestimmes Gedicht ")
+            for index in gedichte:
+                embed.add_field(name=index, value=gedichte[index], inline=False)            
+            
+            await ctx.send(embed=embed)
+            return
+
 
         filename = await tts.write_mp3(text, "de", True)
         channel = ctx.author.voice.channel

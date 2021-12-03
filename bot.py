@@ -2,8 +2,8 @@ from discord.ext import commands
 import discord
 import os
 import shutil
-from dotenv import load_dotenv
 import sys
+import config
 
 from util.logger import Logger
 
@@ -12,14 +12,12 @@ log = Logger('Main')
 intents = discord.Intents.default()
 intents.members = True
 
-load_dotenv()
-
 if len(sys.argv) > 1 and sys.argv[1] == "test":
     PREFIX = "."
-    TOKEN = os.environ['TEST_BOT_TOKEN2']
+    TOKEN = config.TEST_BOT_TOKEN
 else:
-    PREFIX = os.environ["COMMAND_PREFIX"]
-    TOKEN = os.environ['BOT_TOKEN']
+    PREFIX = config.BOT_PREFIX
+    TOKEN = config.BOT_TOKEN
 
 bot = commands.Bot(
     command_prefix=PREFIX, case_insensitive=True, intents=intents)

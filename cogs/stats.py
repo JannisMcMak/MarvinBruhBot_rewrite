@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord
 import requests
 import operator
-import os
+import config
 
 
 class Stats(commands.Cog):
@@ -46,7 +46,7 @@ class Stats(commands.Cog):
     async def leaderboard(self, ctx):
         """Gets statistics of counting channel from API and shows leaderboard"""
 
-        r = requests.get(os.environ["COUNTING_API_LINK"])
+        r = requests.get(config.COUNTING_BOT_API_LINK)
         d = r.json()
 
         sorted_dict = dict(

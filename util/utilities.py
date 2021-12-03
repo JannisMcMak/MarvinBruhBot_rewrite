@@ -5,14 +5,22 @@ import json
 from PIL import Image, ImageFont, ImageDraw
 
 
-async def get_gedicht(i):
+def get_gedicht(i, list=False):
     with open('hidden/gedichte.json') as json_file:
-        data = json.load(json_file)
+        gedichte = json.load(json_file)
 
-        if i == 0:
-            i = random.randint(1, len(data))
+        if list:
+            for index in gedichte:
+                gedichte[index] = gedichte[index][0:45] + "..."
+            
+            return gedichte
 
-        return data.get(str(i), 'Kein Gedicht gefunden...')
+        else:
+            if i == 0:
+                i = random.randint(1, len(gedichte))
+
+            return gedichte.get(str(i), 'Kein Gedicht gefunden...')
+
 
 
 async def get_time_notification(i):
@@ -22,7 +30,7 @@ async def get_time_notification(i):
         if i == 0:
             i = random.randint(1, len(data))
 
-        return data.get(str(i), "I don't no man")
+        return data.get(str(i), "I don't know man")
 
 
 async def get_bitch_voiceline(i):
