@@ -1,6 +1,8 @@
 import discord
 import youtube_dl
 import asyncio
+import json
+from youtube_search import YoutubeSearch
 
 from util.logger import Logger
 
@@ -71,12 +73,13 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
     @classmethod
-    async def search_to_url(search_term):
+    def search_youtube(cls, search_term):
         """
         Returns Youtube URL of a given search string
-        //TODO//
         """
-        pass
+
+        search_result = json.loads(YoutubeSearch(search_term, max_results=5).to_json())
+        return search_result["videos"]
 
     @classmethod
     async def play_in_channel(cls, player, channel):
@@ -98,6 +101,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
             vc = await channel.connect()
         except:
             log.warn("Skipping... Already connected to a channel")
+            return
         
         vc.play(player)
         while vc.is_playing():

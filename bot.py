@@ -52,7 +52,7 @@ bot.load_extension("cogs.stats")
 bot.load_extension("cogs.other")
 bot.load_extension("cogs.tasks")
 bot.load_extension("cogs.admin")
-bot.load_extension("cogs.events")
+#bot.load_extension("cogs.events")
 #bot.load_extension("cogs.help")
 
 bot.run(TOKEN)
