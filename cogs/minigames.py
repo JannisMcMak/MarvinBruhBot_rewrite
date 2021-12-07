@@ -4,6 +4,9 @@ from discord.ext import commands
 import random
 import asyncio
 
+import config
+from util.db_handler import DBHandler
+
 
 class Minigames(commands.Cog):
     """
@@ -13,24 +16,32 @@ class Minigames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.cps_streak = 0
-
+   
+    
+    
     @commands.command()
-    async def cps(self, ctx, streak = 0):
+    async def cps(self, ctx):
         """Rock, Paper Scissors in nsfw (developed by Professor)"""
+
+        db = DBHandler(ctx.author.id, minigame='cps')
 
         def gewinner(wahl, computer, wahl_emote):
             ergebnis = (wahl - computer) % 3
             if ergebnis == 0:
                 if wahl == 1:
-                    embed.set_footer(text ="Cock on cock? Seems kinda gay tbh...", icon_url ="https://web.jsrv.club/%E2%9C%94/thonk.png")
+                    embed.set_footer(text ="Cock on cock? Seems kinda gay tbh...", icon_url=config.THONK_ICON_URL)
                 embed.add_field(name=f"{wahl_emote} gleicht {computer_emote}", value=f"Unentschieden!", inline=False)
                 embed.colour = 0xf6b26b
                 self.cps_streak = 0
 
+
             elif ergebnis == 1:
-                embed.add_field(name=f"{wahl_emote} schlägt {computer_emote}", value="Du hast gewonnen", inline=False)
+                embed.add_field(name=f"{wahl_emote} schlägt {computer_emote}", value=f"{ctx.author.name} hat gewonnen", inline=False)
                 embed.colour = 0x38761d
                 self.cps_streak += 1
+                db.increment_wins()
+                if self.cps_streak > db.get_highscore():
+                    db.new_highscore(self.cps_streak)
 
             elif ergebnis == 2:
                 embed.add_field(name=f"{computer_emote} schlägt {wahl_emote}", value=f"{self.bot.user.name} hat gewonnen", inline=False)
@@ -43,6 +54,8 @@ class Minigames(commands.Cog):
             embed.clear_fields()
             embed.add_field(name=f"{self.bot.user.name}:", value=f"{computer_emote}", inline=False)
             embed.add_field(name=f"{ctx.author.name}:", value=f"{wahl}\n\u200b", inline=False)
+            embed.add_field(name="Winning streak", value=str(self.cps_streak), inline=True)
+            embed.add_field(name="Dein Highscore", value=str(db.get_highscore()), inline=True)
             embed.set_author(name="Nochmal spielen: 🔁")
 
 
@@ -55,17 +68,15 @@ class Minigames(commands.Cog):
 
         embed = discord.Embed(title="\u200b\nCock, Petra, Sophia?\n\u200b", colour=0x8764B8)
         # embed.set_author(name="Cock, Petra, Sophia?\n\u200b")
-        embed.set_thumbnail(url="https://web.jsrv.club/%E2%9C%94/cpslogo.png")
+        embed.set_thumbnail(url=config.CPS_LOGO_URL)
         embed.add_field(name="🍆 Cock", value="schlägt Petra.", inline=False)
         embed.add_field(name="🤰 Petra", value="schlägt Sophia.", inline=False)
         embed.add_field(name="💕 Sophia", value="schlägt Cock.", inline=False)
 
         
-        self.cps_streak = streak
-        
         if self.cps_streak > 0:
-            embed.add_field(name="Winning streak", value=str(streak), inline=True)
-            #embed.add_field(name="Dein Highscore", value="123", inline=True)
+            embed.add_field(name="Winning streak", value=str(self.cps_streak), inline=True)
+            embed.add_field(name="Dein Highscore", value=str(db.get_highscore()), inline=True)
 
         message = await ctx.send(embed=embed)
         await message.add_reaction("🍆")
@@ -121,7 +132,8 @@ class Minigames(commands.Cog):
             return
 
         if str(reaction.emoji) == "🔁":
-            await ctx.invoke(self.bot.get_command("cps"), streak=self.cps_streak)
+            await ctx.invoke(self.bot.get_command("cps"))
 
+    
 def setup(bot):
     bot.add_cog(Minigames(bot))
