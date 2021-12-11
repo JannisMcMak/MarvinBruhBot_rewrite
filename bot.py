@@ -14,7 +14,9 @@ intents.members = True
 
 if len(sys.argv) > 1 and sys.argv[1] == "test":
     PREFIX = "."
-    TOKEN = config.TEST_BOT_TOKEN
+
+    TOKEN = config.TEST_BOT_TOKEN2 if len(sys.argv) > 2 and sys.argv[2] == "2" else config.TEST_BOT_TOKEN
+
 else:
     PREFIX = config.BOT_PREFIX
     TOKEN = config.BOT_TOKEN
@@ -52,7 +54,9 @@ bot.load_extension("cogs.stats")
 bot.load_extension("cogs.other")
 bot.load_extension("cogs.tasks")
 bot.load_extension("cogs.admin")
-bot.load_extension("cogs.events")
+
+if not len(sys.argv) > 1:
+    bot.load_extension("cogs.events")
 #bot.load_extension("cogs.help")
 
 bot.run(TOKEN)

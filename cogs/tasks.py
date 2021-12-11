@@ -144,7 +144,6 @@ class Tasks(commands.Cog):
                         member = ctx.guild.get_member(team_member_id)
                         channel = member.voice.channel
                         voice_channels.append(channel)
-                        print(channel)
                     except:
                         await member.send(text)
                         

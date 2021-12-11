@@ -1,4 +1,5 @@
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, Query
+import operator
 
 class DBHandler():
     """Handles connections to tinydb database. Mainly for minigames
@@ -51,6 +52,29 @@ class DBHandler():
         if len(self.db.search(self.query.user_id == self.user_id)) < 1:
             self.db.insert({'user_id': self.user_id, self.minigame: {'wins': 0, 'highscore': 0}})
 
+
+    def get_leaderboard(self):
+        """Returns dict of users and highscores/wins. Sorted descending by value
+
+        Returns
+        -------
+        dict, dict
+            highscores, wins
+        """
+
+        users = self.db.all()
+        highscores = {}
+        wins = {}
+        
+        for user in users:
+            highscores[user['user_id']] = user[self.minigame]['highscore']
+            wins[user['user_id']] = user[self.minigame]['wins']
+
+        # Sort dicts by size
+        highscores = dict(sorted(highscores.items(), key=operator.itemgetter(1), reverse=True))
+        wins = dict(sorted(wins.items(), key=operator.itemgetter(1), reverse=True))
+
+        return highscores, wins
 
     def get_user_data(self):
         return self.db.get(self.query.user_id == self.user_id)

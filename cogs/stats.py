@@ -4,6 +4,8 @@ import requests
 import operator
 import config
 
+from util.db_handler import DBHandler
+
 
 class Stats(commands.Cog):
     """
@@ -43,26 +45,60 @@ class Stats(commands.Cog):
 
 
     @commands.command()
-    async def leaderboard(self, ctx):
-        """Gets statistics of counting channel from API and shows leaderboard"""
+    async def leaderboard(self, ctx, game: str = "list"):
+        """Displays leaderboards
 
-        r = requests.get(config.COUNTING_BOT_API_LINK)
-        d = r.json()
+        Parameters
+        ----------
+        game : str
+            Which leaderboard to display. Choose from "counting", "cps".
+        """        """"""
 
-        sorted_dict = dict(
-            sorted(d.items(), key=operator.itemgetter(1), reverse=True))
-        del sorted_dict["count"]
+        if game == "list":
+            #Display list of available leaderboards
+            #TODO
+            pass
+        
+        elif game == "counting":
+            r = requests.get(config.COUNTING_BOT_API_LINK)
+            d = r.json()
 
-        url = ctx.author.get_member_named(next(iter(sorted_dict))).avatar_url
+            sorted_dict = dict(
+                sorted(d.items(), key=operator.itemgetter(1), reverse=True))
+            del sorted_dict["count"]
 
-        embed = discord.Embed(title="COUNTING LEADERBOARD", color=0x01cdfe)
-        embed.set_thumbnail(url=url)
+            print(sorted_dict)
 
-        for k in sorted_dict:
-            embed.add_field(name=k, value=sorted_dict[k], inline=False)
+            url = ctx.guild.get_member_named(next(iter(sorted_dict))).avatar_url
 
-        await ctx.send(embed=embed)
+            embed = discord.Embed(title="COUNTING LEADERBOARD", color=0x01cdfe)
+            embed.set_thumbnail(url=url)
 
+            for k in sorted_dict:
+                embed.add_field(name=k, value=sorted_dict[k], inline=False)
+
+            await ctx.send(embed=embed)
+
+        elif game == "cps":
+            db = DBHandler(ctx.author.id, minigame='cps')
+            highscores, wins = db.get_leaderboard()
+            
+            embed = discord.Embed(title="CPS LEADERBOARD", color=0x01cdfe)
+            embed.set_thumbnail(url=config.CPS_LOGO_URL)
+
+            highscore_string = ""
+            win_string = ""
+            for user_id, value in highscores.items():
+                highscore_string += f"\n **{list(highscores).index(user_id) + 1}:** {discord.utils.get(self.bot.get_all_members(), id=user_id).name} (*{value}*)"
+
+            for user_id, value in wins.items():
+                win_string += f"\n **{list(wins).index(user_id) + 1}:** {discord.utils.get(self.bot.get_all_members(), id=user_id).name} (*{value}*)"
+        
+        
+            embed.add_field(name="Win streak", value=highscore_string)
+            embed.add_field(name="Wins", value=win_string, inline=True)
+
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Stats(bot))

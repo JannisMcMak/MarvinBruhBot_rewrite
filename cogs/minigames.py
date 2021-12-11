@@ -46,7 +46,7 @@ class Minigames(commands.Cog):
             elif ergebnis == 2:
                 embed.add_field(name=f"{computer_emote} schlägt {wahl_emote}", value=f"{self.bot.user.name} hat gewonnen", inline=False)
                 embed.colour = 0xbd3e34
-                self.cps_streak = 0
+                #self.cps_streak = 0
 
 
 

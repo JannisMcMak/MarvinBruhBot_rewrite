@@ -79,12 +79,15 @@ class TTS(commands.Cog):
             Message to play
         """
 
+        await ctx.send("Mein IBM cloud account wurde gebannt deshalb funktioniert das gerade nicht sodi :(")
+        """
         filename = await tts.write_mp3_ibm(text, lang="p")
         
         if filename != None:
             await tts.play_in_channel(filename, ctx.author.voice.channel)
         else:
             await ctx.send('Text was too long')
+        """
 
 def setup(bot):
     bot.add_cog(TTS(bot))
