@@ -11,7 +11,7 @@ def get_gedicht(i, list=False):
 
         if list:
             for index in gedichte:
-                gedichte[index] = gedichte[index][0:45] + "..."
+                gedichte[index] = gedichte[index][0:55] + "..."
             
             return gedichte
 

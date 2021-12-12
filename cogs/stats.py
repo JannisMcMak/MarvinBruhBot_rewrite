@@ -52,12 +52,24 @@ class Stats(commands.Cog):
         ----------
         game : str
             Which leaderboard to display. Choose from "counting", "cps".
-        """        """"""
+        """
 
+        db_handler = DBHandler(ctx.author.id, minigame="cps")
+        minigames = db_handler.get_minigame_list()
+        
         if game == "list":
-            #Display list of available leaderboards
-            #TODO
-            pass
+            embed=discord.Embed(title="Liste aller Leaderboards", color=0x01cdfe)
+            embed.set_footer(text="#leaderboard <name> um Leaderboard anzuzeigen")
+
+            minigames_string = ""
+            for minigame in minigames:
+                minigames_string += minigame + "\n"
+
+            embed.add_field(name="Minigames", value=minigames_string, inline=True)
+            embed.add_field(name="Andere", value="counting", inline=True)
+            
+            await ctx.send(embed=embed)
+        
         
         elif game == "counting":
             r = requests.get(config.COUNTING_BOT_API_LINK)
@@ -79,11 +91,12 @@ class Stats(commands.Cog):
 
             await ctx.send(embed=embed)
 
-        elif game == "cps":
-            db = DBHandler(ctx.author.id, minigame='cps')
+        
+        elif game in minigames:
+            db = DBHandler(ctx.author.id, minigame=game)
             highscores, wins = db.get_leaderboard()
             
-            embed = discord.Embed(title="CPS LEADERBOARD", color=0x01cdfe)
+            embed = discord.Embed(title=f"{game.upper()} LEADERBOARD", color=0x01cdfe)
             embed.set_thumbnail(url=config.CPS_LOGO_URL)
 
             highscore_string = ""

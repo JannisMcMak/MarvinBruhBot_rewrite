@@ -12,6 +12,7 @@ class DBHandler():
         self.user_id = user_id
         self.minigame = minigame
         self.check_if_user_exists()
+        self.check_if_minigame_exists()
         
     
     def get_highscore(self):
@@ -52,6 +53,16 @@ class DBHandler():
         if len(self.db.search(self.query.user_id == self.user_id)) < 1:
             self.db.insert({'user_id': self.user_id, self.minigame: {'wins': 0, 'highscore': 0}})
 
+    def check_if_minigame_exists(self):
+        """Checks if current user already has stats for current minigame
+        """
+        user = self.db.search(self.query.user_id == self.user_id)[0]
+        try:
+            test = user[self.minigame]
+            return
+        except KeyError:
+            self.db.update({self.minigame: {'wins': 0, 'highscore': 0}}, self.query.user_id == self.user_id)
+        
 
     def get_leaderboard(self):
         """Returns dict of users and highscores/wins. Sorted descending by value
@@ -75,6 +86,28 @@ class DBHandler():
         wins = dict(sorted(wins.items(), key=operator.itemgetter(1), reverse=True))
 
         return highscores, wins
+
+
+    def get_minigame_list(self):
+        """Returns list of minigames that have recorded stats
+
+        Returns
+        -------
+        list<str>
+            List of minigames
+        """
+
+        minigames = []
+        users = self.db.all()
+        for user in users:
+            keys = list(user.keys())
+            keys.remove('user_id')
+            for key in keys:
+                if key not in minigames:
+                    minigames.append(key)
+
+        return minigames
+
 
     def get_user_data(self):
         return self.db.get(self.query.user_id == self.user_id)

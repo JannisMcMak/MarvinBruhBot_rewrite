@@ -145,7 +145,7 @@ class Other(commands.Cog):
             embed=discord.Embed(title="Liste aller Gedichte", description="*von bekannten Dichtern wie DetlefJoost oder The Wok*", color=0x01cdfe)
             embed.set_footer(text="#gedicht <index> für ein bestimmes Gedicht ")
             for index in gedichte:
-                embed.add_field(name=index, value=gedichte[index], inline=False)            
+                embed.add_field(name=index, value=gedichte[index], inline=True)            
             
             await ctx.send(embed=embed)
             return
