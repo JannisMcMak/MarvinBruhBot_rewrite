@@ -64,9 +64,14 @@ class DBHandler():
             self.db.update({self.minigame: {'wins': 0, 'highscore': 0}}, self.query.user_id == self.user_id)
         
 
-    def get_leaderboard(self):
+    def get_leaderboard(self, limit = 5):
         """Returns dict of users and highscores/wins. Sorted descending by value
 
+        Parameters
+        ----------
+        limit : int
+            Number of leaderboard entries
+        
         Returns
         -------
         dict, dict
@@ -82,8 +87,8 @@ class DBHandler():
             wins[user['user_id']] = user[self.minigame]['wins']
 
         # Sort dicts by size
-        highscores = dict(sorted(highscores.items(), key=operator.itemgetter(1), reverse=True))
-        wins = dict(sorted(wins.items(), key=operator.itemgetter(1), reverse=True))
+        highscores = dict(sorted(highscores.items(), key=operator.itemgetter(1), reverse=True)[:limit])
+        wins = dict(sorted(wins.items(), key=operator.itemgetter(1), reverse=True)[:limit])
 
         return highscores, wins
 

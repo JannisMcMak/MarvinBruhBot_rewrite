@@ -157,7 +157,11 @@ async def write_mp3_twitch(text, formatted: bool = False):
 
     r = requests.post(base_url.format(text), data)
     j = json.loads(r.text)
-    url = j["speak_url"]
+    try:
+        url = j["speak_url"]
+    except KeyError:
+        log.error("Twitch TTS API offline!")
+        return
     r = requests.get(url)
 
     filename = 'cache/{}.mp3'.format(time.time())
