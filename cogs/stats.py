@@ -4,7 +4,7 @@ import requests
 import operator
 import config
 
-from util.db_handler import DBHandler
+from util.db_handler import DBInfoHandler
 
 
 class Stats(commands.Cog):
@@ -54,7 +54,7 @@ class Stats(commands.Cog):
             Which leaderboard to display. Choose from "counting", "cps".
         """
 
-        db_handler = DBHandler(ctx.author.id, minigame="cps")
+        db_handler = DBInfoHandler()
         minigames = db_handler.get_minigame_list()
         
         if game == "list":
@@ -93,8 +93,7 @@ class Stats(commands.Cog):
 
         
         elif game in minigames:
-            db = DBHandler(ctx.author.id, minigame=game)
-            highscores, wins = db.get_leaderboard()
+            highscores, wins = db_handler.get_leaderboard(game)
             
             embed = discord.Embed(title=f"{game.upper()} LEADERBOARD", color=0x01cdfe)
             embed.set_thumbnail(url=config.CPS_LOGO_URL)

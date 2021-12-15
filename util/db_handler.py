@@ -2,7 +2,7 @@ from tinydb import TinyDB, Query
 import operator
 
 class DBHandler():
-    """Handles connections to tinydb database. Mainly for minigames
+    """Handles connections to tinydb database. Mainly for minigames. Includes error handling
     """
 
     def __init__(self, user_id, minigame: str = 'cps', db_name: str = 'minigames_db'):
@@ -62,9 +62,26 @@ class DBHandler():
             return
         except KeyError:
             self.db.update({self.minigame: {'wins': 0, 'highscore': 0}}, self.query.user_id == self.user_id)
-        
 
-    def get_leaderboard(self, limit = 5):
+
+    def get_user_data(self):
+        return self.db.get(self.query.user_id == self.user_id)
+
+
+    def reset(self):
+        self.db.update({self.minigame: {'wins': 0, 'highscore': 0}}, self.query.user_id == self.user_id)
+
+
+class DBInfoHandler():
+    """Handles connections to databases. Used for information gathering. Does not include error handling
+    """
+
+    def __init__(self, db_name: str = 'minigames_db'):
+        self.db = TinyDB('hidden/{}.json'.format(db_name))
+        self.query = Query()
+    
+    
+    def get_leaderboard(self, minigame, limit = 5):
         """Returns dict of users and highscores/wins. Sorted descending by value
 
         Parameters
@@ -83,8 +100,8 @@ class DBHandler():
         wins = {}
         
         for user in users:
-            highscores[user['user_id']] = user[self.minigame]['highscore']
-            wins[user['user_id']] = user[self.minigame]['wins']
+            highscores[user['user_id']] = user[minigame]['highscore']
+            wins[user['user_id']] = user[minigame]['wins']
 
         # Sort dicts by size
         highscores = dict(sorted(highscores.items(), key=operator.itemgetter(1), reverse=True)[:limit])
@@ -113,10 +130,13 @@ class DBHandler():
 
         return minigames
 
+    def get_user_data(self, user_id: int):
+        """Returns all data stored for user
 
-    def get_user_data(self):
-        return self.db.get(self.query.user_id == self.user_id)
+        Parameters
+        ----------
+        user_id : int
+            id of the user
+        """
 
-
-    def reset(self):
-        self.db.update({self.minigame: {'wins': 0, 'highscore': 0}}, self.query.user_id == self.user_id)
+        return self.db.get(self.query.user_id == user_id)

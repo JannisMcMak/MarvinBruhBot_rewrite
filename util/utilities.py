@@ -8,12 +8,14 @@ from PIL import Image, ImageFont, ImageDraw
 def get_gedicht(i, list=False):
     with open('hidden/gedichte.json') as json_file:
         gedichte = json.load(json_file)
+        lenghts = []
 
         if list:
             for index in gedichte:
+                lenghts.append(len(gedichte[index].split()))
                 gedichte[index] = gedichte[index][0:55] + "..."
             
-            return gedichte
+            return gedichte, lenghts
 
         else:
             if i == 0:

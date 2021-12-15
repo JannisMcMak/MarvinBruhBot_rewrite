@@ -8,6 +8,7 @@ import random
 import asyncio
 
 import util
+import util.utilities
 import util.tts_util as tts
 
 log = util.logger.Logger('Other')
@@ -141,11 +142,11 @@ class Other(commands.Cog):
         try:
             text = util.utilities.get_gedicht(int(index))
         except:
-            gedichte = util.utilities.get_gedicht(0, True)
+            gedichte, lengths = util.utilities.get_gedicht(0, True)
             embed=discord.Embed(title="Liste aller Gedichte", description="*von bekannten Dichtern wie DetlefJoost oder The Wok*", color=0x01cdfe)
             embed.set_footer(text="#gedicht <index> für ein bestimmes Gedicht ")
             for index in gedichte:
-                embed.add_field(name=index, value=gedichte[index], inline=True)            
+                embed.add_field(name=index, value=gedichte[index] + "\n*(" + str(lengths[int(index) - 1]) + " Wörter)*", inline=True)            
             
             await ctx.send(embed=embed)
             return

@@ -1,11 +1,14 @@
 from discord.ext import commands
 import discord
+
 import os
 import shutil
 import sys
 import config
+from threading import Thread
 
 from util.logger import Logger
+from web.web import run_apiserver
 
 log = Logger('Main')
 
@@ -59,4 +62,9 @@ if not len(sys.argv) > 1:
     bot.load_extension("cogs.events")
 #bot.load_extension("cogs.help")
 
-bot.run(TOKEN)
+def start_bot():
+    bot.run(TOKEN)
+
+Thread(target=start_bot).start()
+if config.API_SERVER_RUN_BY_DEFAULT:
+    Thread(target=run_apiserver).start()
