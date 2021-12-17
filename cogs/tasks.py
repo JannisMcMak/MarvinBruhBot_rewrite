@@ -1,5 +1,4 @@
-import discord
-from discord.ext import commands, tasks
+from nextcord.ext import commands, tasks
 
 from datetime import datetime, timedelta
 import pytz
@@ -59,9 +58,10 @@ class Tasks(commands.Cog):
                     if channel is None or len(channel.members) < len(c.members):
                         channel = c
             
-            if channel is not None:
+            if channel is not None and len(channel.members) > 0:
                 filename = await tts.write_mp3_twitch(text, True)
                 await tts.play_in_channel(filename, channel)
+
 
 
     @commands.command()

@@ -1,10 +1,11 @@
-from discord.ext import commands, tasks
+from nextcord.ext import commands, tasks
 import signal
 from watchgod import awatch
 import os
 
 from util.logger import Logger
 import config
+from web.web import stop_apiserver
 
 log = Logger('Admin')
 
@@ -27,8 +28,14 @@ class Administration(commands.Cog):
 
         if ctx.author.id in config.ADMIN_USERS:
             log.warn("Restarting container...")
-
+            
+            if config.API_SERVER_RUN_BY_DEFAULT:
+                log.debug("Shutting down API-Webserver...")
+                stop_apiserver()
+            
             os.kill(os.getpid(), signal.SIGTERM)
+            
+        
         else:
             await ctx.send("Nur coole Leute dürfen das!")
 

@@ -1,5 +1,5 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 
 import random
 import asyncio
@@ -66,7 +66,7 @@ class Minigames(commands.Cog):
             await message.clear_reactions()
 
 
-        embed = discord.Embed(title="\u200b\nCock, Petra, Sophia?\n\u200b", colour=0x8764B8)
+        embed = nextcord.Embed(title="\u200b\nCock, Petra, Sophia?\n\u200b", colour=0x8764B8)
         # embed.set_author(name="Cock, Petra, Sophia?\n\u200b")
         embed.set_thumbnail(url=config.CPS_LOGO_URL)
         embed.add_field(name="🍆 Cock", value="schlägt Petra.", inline=False)

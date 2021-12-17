@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from nextcord.ext import commands
+import nextcord
 import requests
 import operator
 import config
@@ -31,7 +31,7 @@ class Stats(commands.Cog):
 
         t = ''.join(topic)
 
-        embed = discord.Embed(title=" ")
+        embed = nextcord.Embed(title=" ")
         embed.set_author(name="{}'s Poll".format(
             host.name), icon_url=host.avatar_url)
         embed.add_field(name=t, value="?", inline=False)
@@ -40,7 +40,7 @@ class Stats(commands.Cog):
         msg = await ctx.send(embed=embed)
 
         for emoji in emojis:
-            emoji = discord.utils.get(ctx.guild.emojis, name=emoji)
+            emoji = nextcord.utils.get(ctx.guild.emojis, name=emoji)
             await msg.add_reaction(emoji)
 
 
@@ -58,7 +58,7 @@ class Stats(commands.Cog):
         minigames = db_handler.get_minigame_list()
         
         if game == "list":
-            embed=discord.Embed(title="Liste aller Leaderboards", color=0x01cdfe)
+            embed = nextcord.Embed(title="Liste aller Leaderboards", color=0x01cdfe)
             embed.set_footer(text="#leaderboard <name> um Leaderboard anzuzeigen")
 
             minigames_string = ""
@@ -83,7 +83,7 @@ class Stats(commands.Cog):
 
             url = ctx.guild.get_member_named(next(iter(sorted_dict))).avatar_url
 
-            embed = discord.Embed(title="COUNTING LEADERBOARD", color=0x01cdfe)
+            embed = nextcord.Embed(title="COUNTING LEADERBOARD", color=0x01cdfe)
             embed.set_thumbnail(url=url)
 
             for k in sorted_dict:
@@ -95,16 +95,16 @@ class Stats(commands.Cog):
         elif game in minigames:
             highscores, wins = db_handler.get_leaderboard(game)
             
-            embed = discord.Embed(title=f"{game.upper()} LEADERBOARD", color=0x01cdfe)
+            embed = nextcord.Embed(title=f"{game.upper()} LEADERBOARD", color=0x01cdfe)
             embed.set_thumbnail(url=config.CPS_LOGO_URL)
 
             highscore_string = ""
             win_string = ""
             for user_id, value in highscores.items():
-                highscore_string += f"\n **{list(highscores).index(user_id) + 1}:** {discord.utils.get(self.bot.get_all_members(), id=user_id).name} (*{value}*)"
+                highscore_string += f"\n **{list(highscores).index(user_id) + 1}:** {nextcord.utils.get(self.bot.get_all_members(), id=user_id).name} (*{value}*)"
 
             for user_id, value in wins.items():
-                win_string += f"\n **{list(wins).index(user_id) + 1}:** {discord.utils.get(self.bot.get_all_members(), id=user_id).name} (*{value}*)"
+                win_string += f"\n **{list(wins).index(user_id) + 1}:** {nextcord.utils.get(self.bot.get_all_members(), id=user_id).name} (*{value}*)"
         
         
             embed.add_field(name="Win streak", value=highscore_string)

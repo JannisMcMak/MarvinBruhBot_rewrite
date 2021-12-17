@@ -1,4 +1,4 @@
-import discord
+import nextcord
 import youtube_dl
 import asyncio
 import json
@@ -30,7 +30,7 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 log = Logger("YTDL")
 
-class YTDLSource(discord.PCMVolumeTransformer):
+class YTDLSource(nextcord.PCMVolumeTransformer):
     """
     Helper class that handles streaming audio from a Youtube video
     """
@@ -58,7 +58,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         Returns
         -------
-        discord.FFmpegPCMAudio
+        nextcord.FFmpegPCMAudio
             Audio player that streams the Youtube video
         """
 
@@ -70,7 +70,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
             data = data['entries'][0]
 
         filename = data['url'] if stream else ytdl.prepare_filename(data)
-        return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
+        return cls(nextcord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
     @classmethod
     def search_youtube(cls, search_term):
@@ -87,9 +87,9 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         Parameters
         ----------
-        player : discord.FFmpegPCMAudio
+        player : nextcord.FFmpegPCMAudio
             Audio player that streams audio. Usually created with :func:`~util.yt_util.YTDLSource.from_url`
-        channel : discord.VoiceChannel
+        channel : nextcord.VoiceChannel
             Channel to connect to
         """
 

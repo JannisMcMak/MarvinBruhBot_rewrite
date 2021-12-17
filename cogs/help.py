@@ -1,8 +1,7 @@
-import discord
-from discord.ext import commands
-from discord.errors import Forbidden
+import nextcord
+from nextcord.ext import commands
+from nextcord.errors import Forbidden
 
-from dotenv import load_dotenv
 import config
 
 async def send_embed(ctx, embed):
@@ -48,7 +47,7 @@ class Help(commands.Cog):
                 owner = owner
 
             # starting to build embed
-            emb = discord.Embed(title='Commands and modules', color=discord.Color.blue(),
+            emb = nextcord.Embed(title='Commands and modules', color=nextcord.Color.blue(),
                                 description=f'Use `{prefix}help <module>` to gain more information about that module')
 
             # iterating trough cogs, gathering descriptions
@@ -72,7 +71,7 @@ class Help(commands.Cog):
                 emb.add_field(name='Not belonging to a module', value=commands_desc, inline=False)
 
             # setting information about author
-            emb.add_field(name="About", value=f"The Bots is developed by {owner_name} and {owner_name2}, based on discord.py.\n\
+            emb.add_field(name="About", value=f"The Bots is developed by {owner_name} and {owner_name2}, based on nextcord.\n\
                                     This version is maintained by {owner}.\n\
                                     Please visit https://github.com/JannisMcMak/MarvinBruhBot_rewrite to submit ideas or bugs.")
             emb.set_footer(text=f"Bot is running {version}")
@@ -87,8 +86,8 @@ class Help(commands.Cog):
                 if cog.lower() == input[0].lower():
 
                     # making title - getting description from doc-string below class
-                    emb = discord.Embed(title=f'{cog} - Commands', description=self.bot.cogs[cog].__doc__,
-                                        color=discord.Color.green())
+                    emb = nextcord.Embed(title=f'{cog} - Commands', description=self.bot.cogs[cog].__doc__,
+                                        color=nextcord.Color.green())
 
                     # getting commands from cog
                     for command in self.bot.get_cog(cog).get_commands():

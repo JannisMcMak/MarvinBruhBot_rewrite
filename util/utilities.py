@@ -1,4 +1,4 @@
-import discord
+import nextcord
 
 import random
 import json
@@ -101,7 +101,7 @@ def ascii(text, size: int = 15, invert=False):
     return rows
 
 
-def get_command_name(message: discord.Message):
+def get_command_name(message: nextcord.Message):
     command = message.content.split(" ")
     command = (command[0])[1:]
 

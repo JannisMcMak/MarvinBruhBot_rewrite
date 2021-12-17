@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
+import asyncio
 
 from util.db_handler import DBInfoHandler
 import config
@@ -49,4 +50,7 @@ async def leaderboard_for_game(minigame: str):
 
 
 def run_apiserver():
-    uvicorn.run(app=__name__ + ":app", port=config.API_SERVER_PORT, host=config.API_SERVER_HOST)
+    uvicorn.run(app=__name__ + ":app", port=config.API_SERVER_PORT, host=config.API_SERVER_HOST, log_level="critical")
+
+def stop_apiserver():
+    asyncio.current_task().cancel()

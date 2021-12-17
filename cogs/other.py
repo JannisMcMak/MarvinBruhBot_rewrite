@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from nextcord.ext import commands
+import nextcord
 
 import requests
 import os
@@ -90,12 +90,12 @@ class Other(commands.Cog):
 
 
     @commands.command()
-    async def wake(self, ctx, user: discord.Member, count: int = 3):
+    async def wake(self, ctx, user: nextcord.Member, count: int = 3):
         """Move someone between voice channel to wake them up
 
         Parameters
         ----------
-        user : discord.Member
+        user : nextcord.Member
             User to move. Used with mention (@user)
         count : int, optional
             Number of times to move the user, by default 3, max 10
@@ -143,7 +143,7 @@ class Other(commands.Cog):
             text = util.utilities.get_gedicht(int(index))
         except:
             gedichte, lengths = util.utilities.get_gedicht(0, True)
-            embed=discord.Embed(title="Liste aller Gedichte", description="*von bekannten Dichtern wie DetlefJoost oder The Wok*", color=0x01cdfe)
+            embed = nextcord.Embed(title="Liste aller Gedichte", description="*von bekannten Dichtern wie DetlefJoost oder The Wok*", color=0x01cdfe)
             embed.set_footer(text="#gedicht <index> für ein bestimmes Gedicht ")
             for index in gedichte:
                 embed.add_field(name=index, value=gedichte[index] + "\n*(" + str(lengths[int(index) - 1]) + " Wörter)*", inline=True)            

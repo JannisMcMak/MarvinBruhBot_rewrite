@@ -1,4 +1,4 @@
-import discord
+import nextcord
 from ibm_cloud_sdk_core import authenticators
 
 import requests
@@ -23,11 +23,11 @@ async def play_in_channel(filename, channel):
     ----------
     filename : str
         Path to the Mp3 file to play
-    channel : discord.VoiceChannel
+    channel : nextcord.VoiceChannel
         Channel to connect to
     """
 
-    if not os.path.isfile(filename):
+    if filename is None or not os.path.isfile(filename):
         log.error("Mp3 file does not exist.")
         return
 
@@ -43,7 +43,7 @@ async def play_in_channel(filename, channel):
         log.warn("Skipping... Already connected to a channel")
         return
 
-    vc.play(discord.FFmpegPCMAudio(source=filename))
+    vc.play(nextcord.FFmpegPCMAudio(source=filename))
 
     while vc.is_playing():
         await asyncio.sleep(1)

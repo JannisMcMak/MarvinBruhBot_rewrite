@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from nextcord.ext import commands
+import nextcord
 
 import os
 import shutil
@@ -12,7 +12,7 @@ from web.web import run_apiserver
 
 log = Logger('Main')
 
-intents = discord.Intents.default()
+intents = nextcord.Intents.default()
 intents.members = True
 
 if len(sys.argv) > 1 and sys.argv[1] == "test":
@@ -62,9 +62,12 @@ if not len(sys.argv) > 1:
     bot.load_extension("cogs.events")
 #bot.load_extension("cogs.help")
 
-def start_bot():
-    bot.run(TOKEN)
-
-Thread(target=start_bot).start()
 if config.API_SERVER_RUN_BY_DEFAULT:
-    Thread(target=run_apiserver).start()
+    try:
+        Thread(target=run_apiserver).start()
+    except (KeyboardInterrupt, SystemExit, SystemError):
+        log.debug("API-Webserver stopped.")
+
+    log.debug("API-Webserver started!")
+
+bot.run(TOKEN)

@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from nextcord.ext import commands
+import nextcord
 from mutagen.mp3 import MP3
 import time
 import os
@@ -32,7 +32,7 @@ class Audio(commands.Cog):
         if len(search) == 0:
             if name == 'list':
                 mp3s = os.listdir("mp3s/")
-                embed = discord.Embed(title="Mp3s", color=0x01cdfe)
+                embed = nextcord.Embed(title="Mp3s", color=0x01cdfe)
 
                 for mp3 in mp3s:
                     name = mp3.split('.')
@@ -67,7 +67,7 @@ class Audio(commands.Cog):
             choice_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
 
 
-            embed=discord.Embed(title="Search results", description=f"for *{search}*", color=0x01cdfe)
+            embed = nextcord.Embed(title="Search results", description=f"for *{search}*", color=0x01cdfe)
             
             for video_data in search_result:
                 embed.add_field(name=str(search_result.index(video_data) + 1) + ". " + video_data["title"], 

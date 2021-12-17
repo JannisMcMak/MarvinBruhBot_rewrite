@@ -1,7 +1,5 @@
-from discord.ext import commands
-import discord
-import random
-import json
+from nextcord.ext import commands
+import nextcord
 import os
 
 import config
@@ -53,7 +51,7 @@ class Events(commands.Cog):
             for role in roles:
                 if role.mention in message.content:
                     log.info("Presence has been changed to " + role.name)
-                    await self.bot.change_presence(activity=discord.Game(name=role.name))
+                    await self.bot.change_presence(activity=nextcord.Game(name=role.name))
 
 
     @commands.Cog.listener()
