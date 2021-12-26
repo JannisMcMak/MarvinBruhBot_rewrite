@@ -121,7 +121,7 @@ class Tasks(commands.Cog):
         """Loop that performs Rocket League tournament notifications"""
 
         for interval in intervals:
-            current_time = (datetime.now(tz=pytz.timezone(config.TZ)) + timedelta(hours=0, minutes=interval)).strftime('%H:%M')
+            current_time = (datetime.now(tz=pytz.timezone(config.TZ)) + timedelta(hours=0, minutes=interval - 1)).strftime('%H:%M')
 
             if current_time == self.rl_tournament_time:
                 text = "Attention epic Rocket League gamers! The tournament starts in {}"
@@ -145,6 +145,11 @@ class Tasks(commands.Cog):
                         channel = member.voice.channel
                         voice_channels.append(channel)
                     except:
+                        log.info("Sending notification to " + member.name)
+                        
+                        if team_member_id == config.RL_TEAM_MEMBER_IDS[2]:
+                            member = ctx.guild.get_member(config.RL_TEAM_NOTIFICATION_IDS[0])
+                        
                         await member.send(text)
                         
                         

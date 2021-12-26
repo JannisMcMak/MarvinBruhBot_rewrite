@@ -20,48 +20,60 @@ class Audio(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def play(self, ctx, name: str = "list", *search):
-        """Plays audio from file or Youtube link
+
+    @commands.command(aliases=["audio", "playmp3"])
+    async def mp3(self, ctx, name: str = "list"):
+        """Plays audio from file
 
         Parameters
         ----------
         name : str, optional
-            Name of the file or link to Youtube video, by default "list" (lists available audio files)
+            Name of the file, by default "list" to display list of available files
+        """
+
+        if name == 'list':
+            mp3s = os.listdir("mp3s/")
+            embed = nextcord.Embed(title="Mp3s", color=0x01cdfe)
+
+            for mp3 in mp3s:
+                name = mp3.split('.')
+                try:
+                    audio = MP3('mp3s/' + name[0] + '.mp3')
+                    audio_length = time.strftime(
+                        '%M:%S', time.gmtime(audio.info.length))
+                    embed.add_field(
+                        name=name[0], value=audio_length, inline=True)
+                except Exception as err:
+                    log.error(err)
+
+            await ctx.send(embed=embed)
+        
+        else:    
+            log.info("Audio file: " + name)              
+            filename = 'mp3s/' + name.lower() + '.mp3'
+            await tts.play_in_channel(filename, ctx.author.voice.channel)
+
+
+    @commands.command(aliases=["playyt", "yt", "search"])
+    async def play(self, ctx, *search):
+        """Plays audio from Youtube link or search string
+
+        Parameters
+        ----------
+        name : str, optional
+            Link to Youtube video or search string
         """      
-        if len(search) == 0:
-            if name == 'list':
-                mp3s = os.listdir("mp3s/")
-                embed = nextcord.Embed(title="Mp3s", color=0x01cdfe)
 
-                for mp3 in mp3s:
-                    name = mp3.split('.')
-                    try:
-                        audio = MP3('mp3s/' + name[0] + '.mp3')
-                        audio_length = time.strftime(
-                            '%M:%S', time.gmtime(audio.info.length))
-                        embed.add_field(
-                            name=name[0], value=audio_length, inline=True)
-                    except Exception as err:
-                        log.error(err)
+        # parse arguments
+        search = [*search]
+        search = " ".join(search)
+        url = ""
 
-                await ctx.send(embed=embed)
-
-            else:
-                if name.startswith("https://"):
-                    player = await yt.YTDLSource.from_url(name, loop=self.bot.loop, stream=True)
-                    log.info("YTDL title: " + player.title)
-                    await yt.YTDLSource.play_in_channel(player, ctx.author.voice.channel)
-                
-                else:
-                    log.info("Audio file: " + name)              
-                    filename = 'mp3s/' + name.lower() + '.mp3'
-                    await tts.play_in_channel(filename, ctx.author.voice.channel)
+        # check if arg is url
+        if search.startswith("https://"):
+            url = search
 
         else:
-            search = [*search]
-            search.insert(0, name)
-            search = " ".join(search)
             search_result = yt.YTDLSource.search_youtube(search)
 
             choice_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
@@ -90,9 +102,11 @@ class Audio(commands.Cog):
             await message.delete()
             await ctx.send("Now playing `" + video_choice["title"] + "`")
 
-            player = await yt.YTDLSource.from_url("https://youtube.com" + video_choice["url_suffix"], loop=self.bot.loop, stream=True)
-            log.info("YTDL title: " + player.title)
-            await yt.YTDLSource.play_in_channel(player, ctx.author.voice.channel)
+            url = "https://youtube.com" + video_choice["url_suffix"]
+
+        player = await yt.YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
+        log.info("YTDL title: " + player.title)
+        await yt.YTDLSource.play_in_channel(player, ctx.author.voice.channel)
 
 
 
@@ -106,23 +120,13 @@ class Audio(commands.Cog):
         await tts.play_in_channel(filename, channel)
 
 
-    @commands.command()
+    @commands.command(aliases=["stop", "dc"])
     async def disconnect(self, ctx):
         """Stops playing current audio and disconnects bot"""        
 
         for voice_client in self.bot.voice_clients:
             voice_client.stop()
             await voice_client.disconnect()
-
-
-    @commands.command()
-    async def stop(self, ctx):
-        """Stops playing current audio and disconnects bot"""        
-
-        for voice_client in self.bot.voice_clients:
-            voice_client.stop()
-            await voice_client.disconnect()
-
 
 
 def setup(bot):
