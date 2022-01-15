@@ -5,6 +5,7 @@ import time
 import os
 import asyncio
 
+from util.views.selection import SimpleSelection
 import util.tts_util as tts
 import util.yt_util as yt
 import util
@@ -76,29 +77,25 @@ class Audio(commands.Cog):
         else:
             search_result = yt.YTDLSource.search_youtube(search)
 
-            choice_emojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"]
-
 
             embed = nextcord.Embed(title="Search results", description=f"for *{search}*", color=0x01cdfe)
             
             for video_data in search_result:
                 embed.add_field(name=str(search_result.index(video_data) + 1) + ". " + video_data["title"], 
                     value="by {} - ({})".format(video_data["channel"], video_data["duration"]), inline=True)
-            embed.set_footer(text="React to choose video")
-            message = await ctx.send(embed=embed)
+            embed.set_footer(text="Click button to choose video")
             
-            for emoji in choice_emojis:
-                await message.add_reaction(emoji)
-            
-            check = lambda r, u: u == ctx.author and str(r.emoji) in choice_emojis
+            view = SimpleSelection(5)
+            message = await ctx.send(embed=embed, view=view)
 
-            try:
-                reaction, user = await self.bot.wait_for("reaction_add", check=check, timeout=20)
-            except asyncio.TimeoutError:
+            await view.wait()
+            
+            if view.choice is None:
                 await message.delete()
                 return
 
-            video_choice = search_result[choice_emojis.index(str(reaction.emoji))]
+            video_choice = search_result[view.choice - 1]
+        
             await message.delete()
             await ctx.send("Now playing `" + video_choice["title"] + "`")
 
