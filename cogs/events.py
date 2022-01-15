@@ -37,6 +37,12 @@ class Events(commands.Cog):
 
         log.success("|========================================================================|")
 
+        # Custom 
+        #conrad = self.bot.get_guild(config.MAIN_GUILD).get_member(352824619360845826)
+        #print(conrad)
+        #await conrad.edit(nick="IchBinEinDummerHurensohn")
+
+
 
     @commands.Cog.listener()
     async def on_message(self, message):

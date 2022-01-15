@@ -51,7 +51,7 @@ class Stats(commands.Cog):
         Parameters
         ----------
         game : str
-            Which leaderboard to display. Choose from "counting", "cps".
+            Which leaderboard to display. Choose from "counting", "cps". "list" to display available leaderboards.
         """
 
         db_handler = DBInfoHandler()

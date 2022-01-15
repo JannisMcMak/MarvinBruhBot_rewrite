@@ -29,7 +29,7 @@ class Other(commands.Cog):
         Parameters
         ----------
         action : str, optional
-            Additional action to perform. "voice" to play in voice, "all" to view all combinations, by default None
+            Additional action to perform. "v" or "voice" to play in voice channel, "all" to view all combinations, by default None
         """        
 
         combination = util.utilities.get_random_name_combination()
@@ -38,7 +38,7 @@ class Other(commands.Cog):
         if action is None:            
             await ctx.send(combination_toprint)
         
-        elif action == "v" or action == "voice":
+        elif action in ["v", "voice"]:
             filename = await tts.write_mp3(combination, "de", True)
             await ctx.send(combination_toprint)
             await tts.play_in_channel(filename, ctx.author.voice.channel)

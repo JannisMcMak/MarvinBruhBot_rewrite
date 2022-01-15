@@ -22,6 +22,7 @@ class Administration(commands.Cog):
             log.debug("Watchtower enabled!")
             self.watchtower.start()
 
+
     @commands.command()
     async def restart(self, ctx):
         """Restarts the container"""        
